@@ -1,0 +1,62 @@
+## replacing list
+
+list[list number] = ["text you wan to replace it"]
+
+
+## dictionary
+# 딕셔너리 선언 및 제어 예시
+user_info = {"name": "Sparta", "age": 20}
+user_info["age"] = 21       # 값 수정
+user_info["role"] = "admin" # 새로운 키-값 쌍 추가
+print(user_info)  # 출력: {'name': 'Sparta', 'age': 21, 'role': 'admin'}
+
+## view method
+
+menu = {"coffee": 4000, "tea": 4500}
+print(menu.keys())   # 출력: dict_keys(['coffee', 'tea'])
+print(menu.values()) # 출력: dict_values([4000, 4500])
+print(menu.items())  # 출력: dict_items([('coffee', 4000), ('tea', 4500)])
+
+price = menu.get("juice", 5000) # juice가 없으므로 기본값 5000을 반환
+print(price)  # 출력: 5000
+
+
+# 집합 선언과 중복 제거 확인
+my_set = set([1, 2, 2, 3, 3, 3])
+print(my_set)  # 출력: {1, 2, 3} (중복이 자동으로 제거됨)
+
+set_a = {1, 2, 3}
+set_b = {3, 4, 5}
+
+print(set_a & set_b)  # 교집합 출력: {3}
+print(set_a | set_b)  # 합집합 출력: {1, 2, 3, 4, 5}
+print(set_a - set_b)  # 차집합 출력: {1, 2}
+print(3 in set_a)     # 포함 여부 확인 결과 도출: True
+
+## if 문 기본 조건문
+
+status = True
+if status:
+    print("조건이 참입니다.")      # 정상 실행 가능 (공백 4칸 일치)
+   print("들여쓰기 오류 발생 예시") # IndentationError 발생 (깊이 불일치)
+
+## 중첩 조건문(Nested if)의 작동 방식과 가독성 문제
+
+is_logged_in = True
+has_permission = True
+
+# 1. 들여쓰기가 깊어지는 중첩 조건문 구조 (권장 X)
+if is_logged_in:
+    if has_permission:
+        print("관리자 대시보드 진입")
+
+# 2. 논리 연산자를 결합한 클린 코드 최적화 구조 (권장 O)
+if is_logged_in and has_permission:
+    print("관리자 대시보드 진입")
+
+
+
+코딩 테스트에서 리스트, 튜플 등 자료에서 몇번째 자료 꺼내세요 라는 시험 많음
+
+set 활용 방법 코딩테스트에서 잘 나옴
+
