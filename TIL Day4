@@ -1,0 +1,155 @@
+##So from this prompt you will see the result will be not contaminated.
+##when you gnereate message data with print prompt you will still get the "저는 전역 변수"
+##when you recall test_scope you will get 저는 지역 변수
+
+# 전역 변수 선언
+message = "저는 전역 변수입니다"
+
+def test_scope():
+    # 전역 변수와 이름이 똑같은 지역 변수 선언
+    message = "저는 지역 변수입니다"
+    print(f"[함수 내부 출력] {message}")  # 지역 변수가 우선 식별됨
+
+test_scope()
+print(f"[함수 외부 출력] {message}")  # 전역 변수 값은 오염되지 않고 유지됨
+
+
+# Local      → 현재 함수 안
+# Enclosing  → 나를 감싸는 함수 안
+# Global     → 파일 전체
+# Built-in   → 파이썬 기본 공간
+
+name = "Global"
+
+def outer():
+    name = "Enclosing"
+
+    def inner():
+        name = "Local"
+        print(name)
+
+    inner()
+
+outer()
+
+## result will be just Local and it means you will get inner result first
+######################################
+
+
+
+count = 0
+
+def increase():
+    global count
+    count += 1
+
+increase()
+increase()
+increase()
+
+print(count)
+
+# Another version of the global
+
+
+
+def increase_counter(item1):
+    item1 = item1 +1
+    return item1
+
+counter = increase_counter(counter)
+counter = increase_counter(counter)
+counter = increase_counter(counter)
+
+print(f"{counter}")
+
+
+#익명 함수
+
+def calculate_price(price):
+    return price * 0.9
+
+# Above one can be same as below
+
+lambda price: price * 0.9
+
+
+#########
+
+
+# def를 활용한 전통적인 일반 함수 구현 방식
+def add_five(x):
+    return x + 5
+print(add_five(10)) # 결과: 15
+
+# lambda를 활용한 익명 함수 변수 매핑 방식
+lambda_add = lambda x: x + 5
+print(lambda_add(10)) # 결과: 15로 일반 함수와 동일한 결과값 도출
+
+#####
+람다 함수와 내장 가공 함수 map(),filter()
+
+map()
+
+prices = [1000, 2000, 3000, 4000]
+
+result = list(map(lambda price: price + 500, prices))
+
+print(result)
+
+
+filter()
+
+result = list(filter(lambda height: height >= 140, heights))
+
+print(result)
+
+
+#스코프 은닉 검증 및 한줄 데이터 가공 구현
+
+score = 5000
+
+def practice_game():
+    score = 100
+    print("연습 점수:", score)
+
+practice_game()
+
+print("실제 점수:", score)
+
+
+#map and filter
+
+# 원시 정수형 데이터 리스트 정의
+raw_scores = [2, 3, 4, 5, 6, 7]
+
+# lambda와 map()을 엮어 리스트 모든 요소의 제곱 값을 한 줄로 추출하기
+squared_scores = list(map(lambda n: n ** 2, raw_scores))
+print(f"1단계 모든 요소 제곱 변환 결과: {squared_scores}")
+
+# 변환된 데이터 중 20을 초과하는 알맹이 데이터만 filter()로 선별하여 추출하기
+final_high_scores = list(filter(lambda score: score > 20, squared_scores))
+print(f"2단계 기준 초과 최종 필터링 결과: {final_high_scores}")
+
+
+
+###
+독립 소스 파일 모듈
+
+# calculator.py
+
+def add(a, b):
+    return a + b
+
+def subtract(a, b):
+    return a - b
+
+# 위에 있는 모듈을 불러와서 사용
+
+# main.py
+
+import calculator
+
+print(calculator.add(10, 5))
+##
+

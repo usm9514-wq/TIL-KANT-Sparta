@@ -1,0 +1,74 @@
+products = ["노트북", "마우스", "키보드"]
+
+for item in products:
+    print(item)
+
+## 반복을 중단하기 위한 종료 조건
+
+
+# 조건식을 활용한 기본 while 문 구조
+numbers = 1
+
+while numbers <= 3:
+    print(f"현재 숫자는 {numbers}입니다.")
+    numbers += 1  # 종료 조건을 유도하기 위한 상태 변경
+
+
+#터미널 강제 탈출
+count = 3
+while count > 0:
+    print(count)
+    count -= 1  # 명확한 종료 조건을 유도하여 False 도출 (누락 시 무한 루프)
+print("발사")
+
+
+#검색 최적화 및 조기 종료
+
+for num in range(1, 6):
+    if num == 4:
+        print(">> 타깃 데이터 4를 식별하여 반복을 즉시 종료합니다.")
+        break
+    print(f"현재 수치: {num}")
+
+##########
+users = [
+    {"name": "민수", "active": True, "point": 1500},
+    {"name": "영희", "active": False, "point": 800},
+    {"name": "철수", "active": True, "point": 2300},
+    {"name": "지수", "active": False, "point": 400}
+]
+
+total_point = 0 vip 충족을 하면서 이 값을 얻어내려면 0 을 우선 할당 해야함
+
+for user in users:
+    if user["active"]:
+        total_point += user["point"]
+
+print(total_point)
+###########################
+
+
+
+
+
+
+
+
+
+    while True:<- to figure it out until you get the corrcet password if you don't delegate this you will have to lanuch everytime to get rigth password.
+    password = str(input("Please enter the password"))
+    if password == "python":
+        print("log In Successfull")
+        break <--- from this section you must put it in or it won't break the loop and continueously generate
+    else: 
+        print("invalid Password")
+
+
+
+
+
+
+
+Default parameter
+
+기본값을 가진 매개변수는 반드시 기본값이 없는 매개변수보다 뒤쪽에 배치해야 합니다. 파이썬 인터프리터가 인수를 앞에서부터 차례대로 매핑하여 식별하기 때문에, 순서가 섞이면 어떤 매개변수에 값을 넣어야 할지 판단할 수 없어 문법 에러가 발생합니다.
