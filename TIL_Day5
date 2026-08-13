@@ -1,0 +1,231 @@
+##Common Error samples
+
+
+**핵심 개념**
+
+- `IndexError`는 존재하지 않는 인덱스에 접근할 때 발생합니다.
+- `ValueError`는 자료형은 맞지만 처리할 수 없는 값을 사용할 때 발생할 수 있습니다.
+- `TypeError`는 서로 맞지 않는 자료형을 연산하는 등의 상황에서 발생합니다.
+- `ZeroDivisionError`는 숫자를 0으로 나눌 때 발생합니다.
+
+
+
+try- except - else - finally
+
+quantity_text = "3"
+
+try:
+    quantity = int(quantity_text)
+except ValueError:
+    print("수량은 숫자로 입력해야 합니다.")
+else:
+    print(f"{quantity}개의 상품 주문을 접수했습니다.")
+finally:
+    print("주문 입력 처리를 종료합니다.")
+
+## raise 키워드
+
+
+def check_order_quantity(quantity):
+    if quantity <= 0:
+        raise ValueError("주문 수량은 1개 이상이어야 합니다.")
+
+    return quantity
+
+order_quantity = 0
+check_order_quantity(order_quantity)
+
+# 비즈니스 규칙 위반 시 예외를 직접 발생시키는 기본 문법 예시
+def check_discount_rate(rate):
+    if rate > 100:
+        # 문법 오류는 아니지만 기획 의도에 어긋나므로 의도적 예외 발생
+        raise ValueError("할인율은 100%를 초과할 수 없습니다.")
+    return rate
+
+
+다중 예외 처리
+
+customers = ["민수", "지수", "철수"]
+
+input_value = "1"
+
+try:
+    customer_index = int(input_value)
+    customer = customers[customer_index]
+except ValueError:
+    print("고객 번호는 숫자로 입력해야 합니다.")
+except IndexError:
+    print("해당 번호의 고객이 존재하지 않습니다.")
+else:
+    print(f"고객 조회 성공: {customer}")
+finally:
+    print("고객 조회 작업을 종료합니다.")
+
+
+<!-- raise 를 통한 data 검즘 -->
+
+def save_user_point(point):
+    if point < 0:
+        raise ValueError("회원 포인트는 음수가 될 수 없습니다.")
+
+    print(f"{point}포인트가 저장되었습니다.")
+
+try:
+    user_point = -500
+    save_user_point(user_point)
+except ValueError as error:
+    print(f"[포인트 저장 실패] {error}")
+
+
+def 데이터_입력_여부_확인():
+    if 입력여부 확인하는 로직
+    raise ValueError("회원 포인트는 음수가 될 수 없습니다.)
+    pass
+
+try:
+    데이터 입력 받는 부분
+    데이터_입력_여부_확인
+except ValueError as error:
+    ai 모델에 입력할 데이터 없을때 처리하는 부분
+
+
+### Error trace back
+
+def apply_discount(price):
+    return price - discount_amount
+
+def calculate_payment(price):
+    return apply_discount(price)
+
+def create_order():
+    final_price = calculate_payment(50000)
+    print(final_price)
+
+create_order()
+
+
+Traceback (most recent call last):
+  ...
+  File "...", in create_order
+    final_price = calculate_payment(50000)
+  File "...", in calculate_payment
+    return apply_discount(price)
+  File "...", in apply_discount
+    return price - discount_amount
+NameError: name 'discount_amount' is not defined
+
+
+## The limitation of using print prompt for debugging
+
+vs code 디버거 설치
+
+control shift x
+
+search python debugger and install
+
+
+디버깅 했을때 step over 할때 i 가 하나씩 올라가면서 variable을 건드림.
+
+for i in range(100): i =0 
+    variable1 *= 9
+    print(variable1) variable = x
+
+
+### 객체지향과 클래스, 인스턴스의 관계
+
+절차 지향
+product_name = "노트북"
+stock = 10
+
+def sell_product(current_stock):
+    return current_stock - 1
+
+stock = sell_product(stock)
+
+print(f"{product_name} 재고: {stock}개")
+
+객체지향
+class Product:
+    def __init__(self, name, stock):
+        self.name = name
+        self.stock = stock
+
+    def sell(self):
+        self.stock -= 1
+
+product = Product("노트북", 10)
+product.sell()
+
+print(f"{product.name} 재고: {product.stock}개")
+
+
+### 클래스와 인스턴스
+이러한 공통 구조를 클래스라는 설계도로 만들고, 실제 가입한 각각의 회원을 인스턴스로 만들 수 있습니다.
+
+클레스에다가 틀을 만들고 인스텐스가 만들어진다. 
+
+class Member:
+    pass
+
+인스 텐스----->member_a = Member()
+member_b = Member()
+
+print(type(member_a))
+print(member_a is member_b)
+
+이틀을 사용해서 변수를 만들어 준다라고 생각하면 됨.
+
+
+### 초기화 함수 init 
+
+class Product:
+    def __init__(self, name, price):
+        self.name = name
+        self.price = price
+
+product = Product("무선 마우스", 30000)
+
+print(product.name)
+print(product.price)
+
+
+##실습 
+
+네가 이번 은행계좌 코드에서 처음에 틀렸던 것들을 정리하면 이래:
+
+1. 출금을 별도 클래스로 만듦
+
+python
+class withdraw:          # ❌ 새 클래스로 분리
+    def __init__(self, amount):
+        ...
+
+출금은 계좌에서 일어나는 일이라 BankAccount 클래스 안에 메서드로 넣어야 했어. 별도 클래스로 빼면 current_balance 객체가 그 기능을 못 써.
+
+2. 메서드 이름 오타 (제일 자주 나온 실수)
+
+python
+def withdrawl(...)   →   current_balance.withdraw(...)
+
+정의한 이름(withdrawl)과 호출한 이름(withdraw)이 달라서 AttributeError. 철자가 withdrwal / withdrawl / withdraw로 계속 바뀐 게 원인이었어.
+
+3. 존재하지 않는 변수 사용
+
+python
+if self.withdrwal >= money:   # ❌ 정의된 적 없는 변수
+
+잔액은 self.balance인데 엉뚱한 이름을 썼어. __init__에서 만든 변수만 self.로 접근할 수 있어.
+
+4. 불필요한 인자 전달
+
+python
+current_balance.withdrawl("kyle", 3000)   # ❌ "kyle"은 필요 없음
+
+출금 메서드는 출금액(money) 하나만 받으면 돼. self는 자동으로 넘어가니까 current_balance.withdraw(3000)으로 충분.
+
+5. f-string에 f 빠짐
+
+python
+print("remaining balance:{current_balance}")   # ❌ f 없음
+
+f가 없으면 {...} 안이 그대로 글자로 출력돼. 그리고 잔액은 current_balance.balance로 접근해야 했어.
