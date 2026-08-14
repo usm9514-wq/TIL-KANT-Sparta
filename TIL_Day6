@@ -1,0 +1,170 @@
+## TIL_Day_6
+
+
+## str과 repr의 역활
+
+
+__str__ 은 pirnt했을때 사용자가 보기 편하도록 예쁘게 정돈된 요약 문장을 뱉습니다.
+
+__repr__ 은 주피터 노트북 셀에서 객체 이름을 그냥 입력 하거나 디버거 창에서 변수를 볼때, 개발자가 데이터 상태를 명확히 파악할 수 있도록 공식 명세를 보여줍니다.
+
+### self를 붙이냐 마냐
+
+self.를 붙이냐 마냐 구분이 헷갈릴 텐데, 기준은 이거야:
+
+self.name, self.hp → __init__에서 self.로 저장한 인스턴스 변수. 객체가 계속 들고 있는 값이라 self. 필요.
+damage → 이 메서드에 그때그때 넘어오는 파라미터. self.로 저장한 적 없으니까 그냥 damage.
+
+## 상속
+
+nheritance: a child class borrowing from a parent class
+
+The key rule: to inherit, you put the parent class name inside the parentheses of the child class definition.
+
+python
+class VIPMember(Member):
+#                 ↑ parent goes here in the parentheses
+
+That single line is what connects them. It tells Python: "VIPMember is a kind of Member, so give it everything Member has."
+
+What "everything Member has" means in your code:
+
+python
+class Member:
+    def login(self):                      # ← parent defines login()
+        print("로그인되었습니다.")
+
+
+class VIPMember(Member):                  # ← inherits from Member
+    def use_vip_lounge(self):             # ← child adds its own method
+        print("VIP 라운지를 이용합니다.")
+
+VIPMember only defines use_vip_lounge(). It never defines login(). But because it inherited from Member, it gets login() for free:
+
+python
+vip_user = VIPMember()
+
+vip_user.login()           # ✅ borrowed from Member (parent)
+vip_user.use_vip_lounge()  # ✅ its own method (child)
+
+So vip_user can do both — the parent's methods and its own.
+
+The mental model: think of it like "is-a." A VIP member is a member, so it can do anything a regular member can (log in), plus extra things only VIPs can (use the lounge).
+
+Why this is useful: you don't have to rewrite login() inside VIPMember. If every kind of member needs to log in, you write login() once in Member, and every child class gets it automatically. Less repeated code, and if you ever fix login(), the fix applies everywhere at once.
+
+
+## 정보 은닉과 캡슐화(Encapsulation)
+
+class Order:
+    def __init__(self, product):
+        self.product = product
+        self.status = "주문 완료"
+
+    def cancel(self):
+        self.status = "주문 취소"
+
+order = Order("키보드")
+
+print(order.product)
+print(order.status)
+
+order.cancel()
+
+print(order.status)
+
+class Person:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age # 현재는 외부에서 언제든 수정할 수 있어 오염에 취약합니다.
+
+
+## 프라이빗 
+        class User:
+    def __init__(self, user_id, password):
+        self.user_id = user_id
+        self.__password = password
+
+user = User("user01", "python1234")
+
+print(user.user_id)
+
+# 다음 코드는 AttributeError가 발생합니다.
+# print(user.__password)
+
+print(user._User__password)
+
+
+## 부모 클래스를 호출하는 super()
+
+#As you can see you can birng parent's call to discount product!
+
+class Product:
+    def __init__(self, name, price):
+        self.name = name
+        self.price = price
+
+class DiscountProduct(Product):
+    def __init__(self, name, price, discount_rate):
+        super().__init__(name, price)
+        self.discount_rate = discount_rate
+
+product = DiscountProduct("노트북", 1000000, 10)
+
+print(product.name)
+print(product.price)
+print(product.discount_rate)
+
+
+
+
+# 우회 통로 함수
+
+class Wallet:
+    def __init__(self):
+        self.__money = 1000  # 숨겨진 데이터
+
+    def get_money(self):     # Getter: 값을 안전하게 꺼내서 전달합니다.
+        return self.__money
+
+    def set_money(self, amount):  # Setter: 올바른 값인지 조건 검증 후 변경합니다.
+        if amount >= 0:
+            self.__money = amount
+        else:
+            print("경고: 지갑의 돈은 음수가 될 수 없습니다.")
+
+##isinsstance() 자료 검증
+
+order_count = 3
+
+if isinstance(order_count, int):
+    print("정상적인 주문 수량입니다.")
+else:
+    print("주문 수량을 숫자로 입력해주세요.")
+
+
+
+## all any
+
+task_status = [True, True, False]
+
+print(all(task_status))
+print(any(task_status))
+
+first one will print false because there is false in list
+second one will print true bccuase in the list there is True data in it.
+
+
+## len(),sum(), round()
+
+order_amounts = [12500, 23000, 17500, 32000]
+
+order_count = len(order_amounts)
+total_amount = sum(order_amounts)
+average_amount = total_amount / order_count
+
+print("주문 건수:", order_count)
+print("총 주문 금액:", total_amount)
+print("평균 주문 금액:", round(average_amount, 2))
+
+
