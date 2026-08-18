@@ -1,0 +1,235 @@
+## 코딩 테스트 
+
+
+def solution(attendance):
+    current = 0
+    longest = 0
+
+    for record in attendance:
+        if record == "O":
+            current += 1
+
+            if current > longest:
+                longest = current
+        else:
+            current = 0
+
+    return longest
+
+###  datetime & time
+
+
+import datetime
+import time
+
+start_datetime = datetime.datetime.now()
+print("작업 시작 시각:", start_datetime.strftime("%Y-%m-%d %H:%M:%S"))
+
+start_time = time.perf_counter()
+
+print("데이터를 처리합니다.")
+time.sleep(1)
+
+end_time = time.perf_counter()
+
+elapsed = end_time - start_time
+print(f"작업 소요 시간: {elapsed:.2f}초")
+
+##자주 쓰는 핵심 매서드
+
+
+메서드/속성	설명
+datetime.datetime.now()	현재 날짜와 시각 정보(연, 월, 일, 시, 분, 초, 마이크로초)를 반환합니다.
+datetime.date.today()	현재 날짜 정보(연, 월, 일)만 반환합니다.
+datetime.timedelta()	두 날짜나 시간 사이의 간격을 표현하거나 계산(더하기, 빼기)할 때 사용합니다.
+time.sleep(secs)	인자로 전달된 초(second)만큼 프로그램의 실행을 일시 정지시킵니다.
+time.perf_counter()	소요 시간 측정에 적합한 높은 해상도의 고정밀 타이머 값을 반환합니다.
+
+
+## Math Method
+
+메서드/속성	설명
+math.ceil(x)	소수점 올림 처리를 하여 $x$보다 크거나 같은 가장 작은 정수를 반환합니다.
+math.floor(x)	소수점 내림 처리를 하여 $x$보다 작거나 같은 가장 큰 정수를 반환합니다.
+math.trunc(x)	소수점 이하 자리를 무조건 버리고 정수 부분만 잘라내어 반환합니다.
+math.fabs(x)	실수 $x$의 절대값을 반환합니다.
+math.sqrt(x)	$x$의 제곱근(루트) 값을 반환합니다.
+math.pi	원주율 상숫값($\approx 3.141592$)을 제공합니다.
+
+## 데이터 표준 전환 ** 중요
+
+파이썬의 딕셔너리로 저장되어 있다고 가정
+
+json.dumps() 
+
+import json
+
+product = {
+    "name": "무선 마우스",
+    "price": 25000,
+    "in_stock": True
+}
+
+json_text = json.dumps(product, ensure_ascii=False)
+
+print("JSON 데이터:")
+print(json_text)
+print("변환 후 타입:", type(json_text))
+
+restored_product = json.loads(json_text)
+
+print("\n복원된 상품명:", restored_product["name"])
+print("복원 후 타입:", type(restored_product))
+
+
+**실행 결과**
+
+```
+JSON 데이터:
+{"name": "무선 마우스", "price": 25000, "in_stock": true}
+변환 후 타입: <class 'str'>
+
+복원된 상품명: 무선 마우스
+복원 후 타입: <class 'dict'>
+```
+
+처음의 `product`는 파이썬의 `dict` 객체입니다.
+
+`json.dumps()`를 사용하면 JSON 형식의 `str` 데이터가 되고, `json.loads()`를 사용하면 다시 파이썬의 `dict`로 복원됩니다.
+
+JSON에서 참을 나타내는 값은 `true`로 표현되지만, 다시 파이썬 객체로 변환하면 `True`로 복원됩니다.
+
+프로그램끼리 소통할때 정해놓은것임 
+
+
+- `json.dumps()`는 파이썬 객체를 JSON 문자열로 변환합니다.
+- `json.loads()`는 JSON 문자열을 파이썬 객체로 변환합니다.
+- JSON은 서로 다른 프로그램이나 시스템 사이에서 데이터를 주고받을 때 자주 사용하는 형식입니다.
+
+
+##random tip
+
+import random
+
+print(random.random()*100)-> 이렇게 만들면 0 에서 100까지의 실수가 출력이 된다.
+
+
+[시스템 및 파일 제어] os & sys
+
+import os
+
+current_folder = os.getcwd()
+file_path = os.path.join(current_folder, "sales.csv")
+
+print("현재 작업 폴더:", current_folder)
+print("확인할 파일 경로:", file_path)
+
+if os.path.exists(file_path):
+    print("sales.csv 파일이 존재합니다.")
+else:
+    print("sales.csv 파일이 존재하지 않습니다.")
+
+## 현재 스크립트가 실행되고 있는 물리적인 파일 확인 매서드
+
+메서드/속성	라이브러리	설명
+os.getcwd()	os	현재 가동 중인 파이썬 프로세스의 작업 디렉토리 경로를 반환합니다.
+os.listdir(path)	os	지정한 경로 내부에 존재하는 파일 및 폴더 목록을 리스트로 반환합니다.
+os.path.exists(path)	os	인자로 준 파일이나 폴더 경로가 실제로 존재하는지 여부를 판단(True/False)합니다.
+os.path.join(p1, p2)	os	운영체제 환경(Windows, Mac 등)에 맞춰 파일 경로를 안정적으로 결합해 줍니다.
+sys.version	sys	현재 실행 중인 파이썬 인터프리터의 사양 및 상세 버전 정보 문자열을 반환합니다.
+sys.argv	sys	명령행(터미널)에서 프로그램 실행 시 함께 전달된 인자(Arguments) 목록을 리스트로 관리합니다.
+sys.exit()	sys	실행 중인 파이썬 프로그램을 즉시 종료시킵니다.
+
+ ##파일을 쓸건지 읽을건지 이어쓸지
+read = r append = a write = w
+
+ # 파일 열기 모드 'w'는 쓰기(write) 모드를 의미합니다.
+with open("test.txt", "w", encoding="utf-8") as file:
+    file.write("파이썬 파일 입출력 공부 시작!\n")
+    file.write("with 구문 덕분에 자동으로 파일이 닫힙니다.\n")
+# 이 라인으로 넘어오는 순간 파일은 자동으로 안전하게1 닫힌 상태가 됩니다.
+
+## 제이슨에서도 딕셔너리 처럼 보기 위해서  쓴느 문구
+
+딕셔너리와 같이 키 값으로 값을 읽는다.
+
+1. 딕셔너리.keys()
+
+1. 딕셔너리.value()
+
+1. 딕셔너리.items()
+
+jason  안에 범조라는 애가 가지고 있는 포인트 출력해줘
+ for key_list, value_list in loaded_member.items():
+ print(f"key:{key}, value: {value}")
+ if key == 'name'
+ if item == "범조"
+print(item)
+beomjo_index = Index
+if key == 'point':
+
+else:
+print(value[beomjo_index])
+for key, value in loaded_member.itmes():
+print(f"key:"{key}. va;ie"{value})
+      if key == 'name':
+      for index, item in enumerate(value):
+      if  item =='범조'
+      beomjo_index - IndexError
+
+    loaded_member ['point'][beomjo_index]
+ print(key, value)
+
+## 파일 읽는거
+
+pandas => 있는거
+matlaplot ->시각화
+numpy -> 계산식
+##[[powershell  관리자 모드로 다시 파일 생성]]
+ 관리 모드로 실행
+
+powershell -ExecutionPolicy Bypass
+mkdir folder Name
+cd folder name 
+uv init 
+uv run main.py
+
+vs terminal
+uv add ipykernl
+uv add numpy pandas matplotlib
+
+##SQL
+
+PK(primary key) and FK(foreign key)
+
+ 호텔 예약 서비스이고 고객 정보와 예약 정보가 따로 저장 되어 있음
+
+customers
+
+customer_id | name
+------------+--------
+1           | 김민수
+2           | 이지현
+
+
+reservations
+
+reservation_id | customer_id | room_number
+---------------+-------------+------------
+1001           | 1           | 301
+1002           | 2           | 502
+1003           | 1           | 205
+
+
+CREATE TABLE customers (
+    customer_id INT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE reservations (
+    reservation_id INT PRIMARY KEY,
+    customer_id INT,
+    room_number INT,
+    FOREIGN KEY (customer_id)
+        REFERENCES customers(customer_id)
+);
