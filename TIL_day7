@@ -205,7 +205,7 @@ PK(primary key) and FK(foreign key)
  호텔 예약 서비스이고 고객 정보와 예약 정보가 따로 저장 되어 있음
 
 customers
-
+  
 customer_id | name
 ------------+--------
 1           | 김민수
@@ -233,3 +233,30 @@ CREATE TABLE reservations (
     FOREIGN KEY (customer_id)
         REFERENCES customers(customer_id)
 );
+
+## txt, csv, json
+
+프로 그램 실행 메시지를 시간 순서대로 한줄씩 저장한다
+상품명 가격 재고 처럼 행과 영ㄹ이 일정한 표 데이터를 저장한다
+사용자 정보 안에 권한, 설정, 선호 목록 등 중첩 구조가 존재한다
+
+
+
+##용어 정리
+
+data 이름, 나이처럼 사실을 표현하는 원시 값
+database  데이터 집합
+DBMS DB를 생성하고 관리 운영하고 sql 요청을 처리하는 소프트 웨어
+query 데이터 베이스에 보내는 명령
+sql  쿼리를 작성하기 위한 언어
+
+ 구성요소 | 설명 | 이 테이블에서의 예시
+
+ table | 관련 데이터를 모아둔 구조  |회원 테이블 전체|
+  row | 하나의 데이터 항목  |1, 홍길동 , honggildong@exmaple.compile
+  column |데이터의 속성 | 이름, 이메일 ,가입일
+
+  cell 행과열이 만나는 값 | 홍길동
+
+
+  

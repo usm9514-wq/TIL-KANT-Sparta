@@ -1,0 +1,240 @@
+**오늘의 코딩 테스트 진행 전 사전 지식**
+
+---
+
+코딩테스트에서는 단순히 Python 문법만 사용하는 것이 아니라,
+문제를 효율적으로 해결하기 위해 다양한 **자료구조와 알고리즘**을 활용합니다.
+
+대표적으로 다음과 같은 유형이 자주 등장합니다.
+
+- **해시(Hash)**: 해시를 이용해 데이터를 빠르게 저장하고 조회하는 방법
+- **스택/큐(Stack/Queue)**: 데이터를 특정 순서로 저장하고 꺼내는 자료구조
+- **힙(Heap)**: 최솟값 또는 최댓값을 우선적으로 빠르게 꺼내기 위한 자료구조
+- **정렬(Sorting)**: 데이터를 특정 기준에 따라 순서대로 배치하는 방법
+- **완전탐색(Brute Force)**: 가능한 경우를 하나씩 모두 확인하는 방법
+- **그리디(Greedy)**: 현재 상황에서 가장 좋은 선택을 반복하는 문제 해결 방법
+- **동적 계획법(DP)**: 이전에 계산한 결과를 저장하고 재사용하는 문제 해결 방법
+- **DFS/BFS**: 연결된 데이터를 일정한 순서로 탐색하는 대표적인 방법
+- **이분 탐색(Binary Search)**: 정렬된 데이터에서 탐색 범위를 절반씩 줄여가며 값을 찾는 방법
+- **그래프(Graph)**: 객체와 객체 사이의 연결 관계를 표현하는 자료구조
+
+
+## Stack
+
+### 스택(Stack)이란?
+
+스택은 **나중에 들어온 데이터를 먼저 꺼내는 자료구조**입니다.
+
+이러한 방식을 **LIFO(Last In, First Out)** 라고 합니다.
+
+예를 들어 웹 브라우저에서 페이지를 차례대로 방문한 뒤 `뒤로가기`를 누르면, 가장 최근에 방문했던 페이지부터 돌아갑니다. 이런 상황에서 스택을 활용할 수 있습니다.
+
+Python에서는 `list`의 다음 기능을 이용해 스택을 표현할 수 있습니다.
+
+- `append()` : 스택의 마지막에 데이터 추가
+- `pop()` : 스택의 마지막 데이터 제거 및 반환
+→ `pop()` 로 실행 시 마지막 인덱스 제거 및 반환
+→ `pop(index)` 로 실행 시 index에 해당하는 항목 제거 및 반환
+
+def solution(pages, back_count):
+    stack = []
+
+    for page in pages:
+        stack.append(page)
+
+    for i in range(back_count):
+        if len(stack) > 1:
+            stack.pop()
+
+    return stack[-1]
+
+
+## 조건문을 지원하는 연산자
+
+### 여러 조건을 조합해 프로모션 대상 상품 찾기
+
+상품 담당자가 다음 조건에 맞는 상품만 골라 프로모션 대상으로 검토하려고 합니다.
+
+- 가격이 500 이상 1500 이하
+- 모델 연도가 2017 또는 2018
+
+이런 조건은 `BETWEEN`, `IN`, `AND` 등의 연산자를 조합해서 표현할 수 있습니다.
+
+```sql
+SELECT product_name, model_year, list_price
+FROM products
+WHERE list_price BETWEEN 500 AND 1500
+  AND model_year IN (2017, 2018);
+```
+## commands exmaples that you can use with where and case when
+연산자	예시	의미
+>, <	N<10, N>10	N이 10 미만, N이 10 초과
+>=, <=	N<=10, N>=10	N이 10 이하, N이 10 이상
+=	N=10	N이 10인 값
+!=	N!=10	N이 10이 아닌 값
+LIKE	LIKE('%과자%')	해당 문자열을 포함하는 값 (앞뒤 % 활용)
+AND	A AND B	A와 B 조건 모두 만족
+OR	A OR B	A 또는 B 조건 하나라도 만족
+NOT, !	NOT A, !A	A가 아닌 값
+BETWEEN	A BETWEEN 10 AND 20	10 이상 20 이하
+IN	A IN (B)	B 목록에 A가 포함된 값 (* 괄호 필수)
+NOT IN	A NOT IN (B)	B 목록에 A가 포함되지 않은 값
+IS NULL	A IS NULL	A가 비어있는 값
+IS NOT NULL	A IS NOT NULL	A가 비어있지 않은 값
+
+## 
+이론 시간에 
+ schemas 항목에 오른쪽 마우스 클릭
+ create new schema
+ 새롭게 생긴 스키마 밑에 실습시간에 사용하는 stocks.csv 임포트
+
+ 이후 조회할때는
+
+ select *
+ from  이론시간스키마.stocks
+
+ select *
+ from 실습시간스키마.stocks
+
+ ## orderby 로 정렬 하는 방법
+
+ -- 나이 기준 오름차순 정렬 (기본값)
+SELECT *
+FROM basic.theglory
+ORDER BY 나이;
+
+-- 나이 기준 내림차순 정렬
+SELECT *
+FROM basic.theglory
+ORDER BY 나이 DESC;
+
+-- 다중 정렬: 날짜 내림차순 → 나이 오름차순
+SELECT 날짜, 이름, 성별, 나이, 직업
+FROM basic.theglory
+ORDER BY 1 DESC, 4 ASC;
+
+### groupby 
+
+-- GROUP BY 기본 구조
+SELECT 기준열, 집계함수(열)
+FROM 테이블명
+WHERE 조건    -- 생략 가능
+GROUP BY 기준열;
+
+-- 예시: 성별 기준 집계
+SELECT 성별,
+       COUNT(*) AS cnt,
+       AVG(나이) AS avg_age,
+       MAX(나이) AS max_age,
+       MIN(나이) AS min_age,
+       SUM(나이) AS sum_age
+FROM basic.theglory
+GROUP BY 성별;
+
+group by를 해야 그 각각의 분류 기준으로 묶여서 각 카트가 적용됨.
+
+
+## Dbeaver 비밀 번호를 까먹었을때
+
+1. 파일 위치 찾기
+
+Windows: %APPDATA%\DBeaverData\workspace6\General\.dbeaver\credentials-config.json
+Mac: ~/Library/DBeaverData/workspace6/General/.dbeaver/credentials-config.json
+
+
+openssl aes-128-cbc -d \
+  -K babb4a9f774ab853c96c2d653dfe544a \
+  -iv 00000000000000000000000000000000 \
+  -in "credentials-config.json" | dd bs=1 skip=16 2>/dev/null
+
+
+## Having and group By
+
+select 성별, avg(나이) as avg_age
+from basic.theglory
+where 나이 >- 31 -- 1단계 : 그룹화 전 개별 행 필터링
+--> from 테이블이름, 테이블 이름에 들어있는 각각의 데이터에 대해서 where 절을 걸어주고
+group by 성별 --2단계  성별로 그룹화
+having avg(나이 ) > 41; --3단계 집계결과 필터링
+
+
+## difference between union and union all
+
+-- UNION: 중복 제거
+SELECT city
+FROM customers
+WHERE state = 'NY'
+
+UNION
+
+SELECT city
+FROM customers
+WHERE state = 'CA';
+
+
+-- UNION ALL: 중복 포함 (모든 행)
+SELECT city
+FROM customers
+WHERE state = 'NY'
+
+UNION ALL
+
+SELECT city
+FROM customers
+WHERE state = 'CA';
+
+## join
+
+**JOIN이란?**
+
+JOIN은 두 테이블을 **가로(열) 방향으로 연결**하는 방법이에요.
+
+공통 키(예: `customer_id`)를 기준으로 두 테이블의 행을 연결해서, 마치 하나의 넓은 테이블처럼 조회할 수 있어요.
+
+
+
+ --- join 선택시 고랴할것들
+
+따라서 JOIN 종류를 선택할 때는 단순히 문법을 외우기보다 "어느 테이블의 행을 반드시 남겨야 하는가?"를 먼저 생각하는 것이 좋습니다.
+
+- 일치하는 데이터만 필요 → `INNER JOIN`
+- 왼쪽 데이터를 모두 유지 → `LEFT JOIN`
+- 오른쪽 데이터를 모두 유지 → `RIGHT JOIN`
+- 양쪽 데이터를 모두 유지 → `FULL OUTER JOIN`
+
+
+--- 써도 되고 안써도 되는것 왜냐하면 어다피 장동으로 inner join이 됨
+
+
+**INNER JOIN: 교집합만 보기**
+
+INNER JOIN은 두 테이블에서 **ON 조건이 일치하는 행만** 결과에 포함해요.
+
+어느 한 쪽 테이블에만 있는 행은 결과에서 제외돼요. 가장 기본적이고 많이 쓰이는 JOIN 방식이에요.
+
+from customer)id
+first_name 
+
+
+##  많이 쓴느 sql
+
+select
+	customer_id
+	customer_city
+	customer_state
+from customers c
+join customer state in ('MG', 'PR', 'SC');
+
+-------
+select
+   product_id
+   product_category_name
+from products
+product_category_name like '%casa%'
+
+---
+
+## 문자형  null 값 
+update orders
+set order_delivered_customer date = null
+where trim(order_delived_custoer_date)=""
