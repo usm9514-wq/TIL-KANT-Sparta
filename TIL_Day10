@@ -1,0 +1,247 @@
+## Queue란
+
+FIFO 구조
+
+from collections import deque
+
+queue = deque()
+
+queue.append("A")
+queue.append("B")
+queue.append("C") ## []
+
+print(queue.popleft())
+print(queue)
+
+
+`deque`에서는 다음 메서드를 이용해 큐를 사용할 수 있습니다.
+
+- `append()` : 큐의 뒤쪽에 데이터 추가
+- `popleft()` : 큐의 앞쪽 데이터 제거
+
+queue = []
+
+queue.append("A")
+queue.append("B")
+queue.append("C")
+
+print(queue.pop(0))
+print(queue)
+
+## 코딩 테스트가 이런 볼수 없는 테스트 케이스가  pop을 쓰나 deq를 쓰나 같은데 코딩 테스트를 볼때는 deque를 쓰자.!
+
+
+
+## 데이터 베이스를 분리 관리
+
+-- public 스키마의 customers 테이블
+SELECT *
+FROM public.customers;
+
+-- practice 스키마의 customers 테이블
+SELECT *
+FROM practice.customers; 
+
+##테이블 만드느거 에러 확인
+
+# 조인을 사용해야 하는 상황: 하나의 테이블의 정보만으로 원하는 정보를 얻을 수 없을때 필요
+
+ex)
+고객 테이블 구성: 고객 id, 이름 ,휴대폰 번호
+
+주문 테이블 구성: 주문 id. 고객 id, 상품명, 주문 일자
+
+업무 상황: 우리 고객별(이름)로 언제 뭐 주문했는지 확인해봐
+
+0 고객 테이블만으로 처리 불가, 주문 테이블만으로 처리 불가
+-> 고객 테이블과 주문 테이블 같이 봐야 처리 가능
+
+우리는 테이블 정보 알고 있는 사람한테
+
+-> 저 고객별로 어떤거 언제 주문했는지 알고 싶은데 어떤 테이블, 칼럼 보면 돼요?
+-> 아 고객 테이블이랑 주문 테이블 보시면 돼요, 두개 가팅 볼때 customer_id 로 엮으로면 돼요
+
+-> 아, 이 두개 테이블 사용하면 뽑을 수 있겠고, on  으로 customer_id 로 걸어야 겟다.
+
+##     이거는 오른쪽에 있는거는 다 보여주고 왼쪽에 없는거는 빼줌
+SELECT
+    p.product_id,
+    p.product_name,
+    oi.order_id,
+    oi.quantity
+FROM order_items oi
+RIGHT JOIN products p
+    ON oi.product_id = p.product_id --- 321. 125,319, 317, 195
+order by p.product_id;
+
+
+select *
+from order_items
+order by prodcut_id; -- 315까지 조회가 가능 (321까지 보여지는 product까지는 NULL로 대체 해서 출력)
+
+select *
+from products
+order by prodcut_id; -- 321까지 조회가 가능
+
+
+## full outter join
+
+FULL OUTER JOIN은 두 테이블의 **모든 행을 합집합**으로 포함해요.
+
+양쪽 다 포함되므로, 한쪽에 없는 값은 `NULL`로 채워요.
+
+PostgreSQL에서는 `FULL OUTER JOIN` 또는 `FULL JOIN`으로 사용할 수 있어요.
+
+제고 등록이 없는데도(둘다 없지만 product and stocks ) 
+
+
+FROM customers c
+FULL OUTER JOIN orders o( from A join B)
+
+
+JOin이 많이 쓰임
+
+## 서브 쿼리
+
+쿼리 안에 쿼리 
+
+
+SELECT product_id, product_name, list_price
+FROM products
+WHERE list_price > (
+    SELECT AVG(list_price)
+    FROM products
+);
+
+
+## 나중에 데이터를 조회할때 postgreql 결과 float4로 변경하는법 을 그냥 검색 하면 다 나옴
+
+## IN/NOT IN
+- 서브쿼리가 여러 값을 반환할 때 `IN`을 사용할 수 있습니다.
+- `IN`은 서브쿼리 결과 목록에 포함된 값을 찾습니다.
+- `NOT IN`은 서브쿼리 결과 목록에 포함되지 않은 값을 찾습니다.
+- `NOT IN`은 서브쿼리 결과에 `NULL`이 포함되는 경우 주의해야 합니다
+
+
+# exists/ not exists
+
+- `EXISTS`는 조건에 맞는 행이 존재하는지 확인합니다.
+- `NOT EXISTS`는 조건에 맞는 행이 존재하지 않는지 확인합니다.
+- 서브쿼리에서 외부 쿼리의 값을 참조할 수 있습니다.
+- `SELECT 1`은 값을 가져오는 목적이 아니라 존재 여부를 확인하기 위해 자주 사용하는 형태입니다. -> 존재가 확인되면 실행 , 안되면 실행 x
+
+
+exist 구문
+-- 주문 이력이 있는 고객만 조회
+SELECT customer_id, name
+FROM customers c
+WHERE EXISTS (
+    SELECT 1
+    FROM orders o
+    WHERE o.customer_id = c.customer_id
+);
+
+not exist
+-- 주문 이력이 없는 고객 조회
+SELECT customer_id, name
+FROM customers c
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM orders o
+    WHERE o.customer_id = c.customer_id
+);
+
+연습문제
+selec  saff_id
+from stocks s
+join product p
+on s.product_id - p.product_id
+
+SELECT p.product_id, p.product_name
+FROM stocks
+order by product_id
+
+SELECT p.product_id, p.product_name
+WHERE EXISTS (
+    SELECT  FROM stocks s WHERE s.product_id = p.product_id
+);
+
+
+## from 절 서브 쿼리
+
+**인라인 뷰(Inline View)란?**
+
+- FROM절의 서브쿼리를 인라인 뷰(Inline View)라고 합니다.
+- 서브쿼리의 결과를 임시 테이블처럼 외부 쿼리에서 사용할 수 있습니다.
+- 집계한 결과를 다시 필터링하거나 다른 데이터와 결합할 때 유용합니다.
+
+------------
+
+
+FROM절에 위치한 서브쿼리를 인라인 뷰라고 불러요.
+
+서브쿼리의 결과가 마치 하나의 테이블처럼 동작하기 때문에 붙여진 이름이에요.
+
+데이터베이스에 저장되지 않는 임시 테이블이라고 생각하면 이해하기 쉬워요.
+-- 고객별 총 주문 금액을 먼저 계산한 뒤, 100만원 이상인 고객만 조회
+SELECT customer_id, total_amount
+FROM (
+    SELECT customer_id, SUM(amount) AS total_amount
+    FROM orders
+    GROUP BY customer_id
+) AS customer_totals
+WHERE total_amount >= 1000000;
+
+여기서 `( ... ) AS customer_totals` 부분이 인라인 뷰예요.
+
+`GROUP BY`로 집계한 결과를 외부 쿼리에서 다시 필터링할 수 있어요.
+
+
+
+## 2. SELECT절 서브쿼리: 스칼라 서브쿼리
+
+SELECT
+    product_id,
+    product_name,
+    list_price,
+    (SELECT MAX(list_price) FROM products) AS max_price
+FROM products;
+
+
+product_id | product_name | list_price | max_price
+-----------+--------------+------------+----------
+1          | 상품 A       | 599.99     | 11999.99
+2          | 상품 B       | 749.99     | 11999.99
+3          | 상품 C       | 999.99     | 11999.99
+
+
+
+
+
+- SELECT절의 서브쿼리를 스칼라 서브쿼리(Scalar Subquery)라고 합니다.
+- 스칼라 서브쿼리는 하나의 행, 하나의 열에 해당하는 단일 값을 반환해야 합니다.
+- `AVG()`, `MAX()`, `COUNT()` 같은 집계 함수를 이용하면 단일 값을 만들기 쉽습니다.
+
+
+
+
+연습문제 4
+select
+	product_id,
+	product_name,
+	list_price,
+(select sum(s.quantity)
+from stocks s
+where s.prodcut_id - p.product_id
+) as total_stock
+from products p
+order by p.product_id;
+
+## 언제 join을 쓰고 언제 서브 쿼리를 쓸까.
+
+비교 항목	서브쿼리	JOIN
+가독성	조건/계산 로직이 명확하게 분리됨	여러 테이블 관계를 한눈에 파악 가능
+반환 구조	외부 쿼리 기준의 열만 선택 가능	여러 테이블의 열을 자유롭게 선택 가능
+성능	단순 조건 필터링에 유리	대용량 데이터 JOIN에 최적화된 경우 많음
+NULL 처리	EXISTS 사용 시 안전	OUTER JOIN으로 NULL 제어 가능
+적합한 상황	집계 결과를 조건으로 사용, 존재 여부 확인	두 테이블의 열을 함께 조회, 복잡한 관계 표현
