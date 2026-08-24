@@ -1,0 +1,294 @@
+### 힙(Heap)이란?
+
+힙은 여러 데이터 중에서 **가장 작은 값이나 가장 큰 값을 반복적으로 빠르게 선택할 때 사용하는 자료구조**입니다.
+
+예를 들어 다음과 같은 상황에서 활용할 수 있습니다.
+
+- 가장 우선순위가 높은 작업부터 처리하기
+- 가장 작은 값을 하나씩 꺼내기
+- 여러 데이터 중 최소값을 반복해서 선택하기
+
+Python에서는 힙을 직접 구현하기보다 표준 라이브러리인 `heapq`를 사용할 수 있습니다.
+
+`heapq`는 기본적으로 **최소 힙(Min Heap)** 으로 동작하기 때문에 가장 작은 값부터 꺼낼 수 있습니다.
+
+주로 다음 두 함수를 사용합니다.
+
+- `heapq.heappush(heap, value)` : 힙에 값을 추가
+- `heapq.heappop(heap)` : 가장 작은 값을 꺼내면서 제거
+
+import heapq
+
+numbers = []
+
+heapq.heappush(numbers, 5)
+heapq.heappush(numbers, 2)
+heapq.heappush(numbers, 8)
+
+print(heapq.heappop(numbers))
+print(heapq.heappop(numbers))
+
+
+
+즉, `heapq`에서 **최댓값을 우선해서 꺼내고 싶다면 값을 넣을 때 음수로 바꾸고, 꺼낼 때 다시 음수로 바꾸는 방법**을 사용할 수 있습니다.
+
+---
+
+def 함수 이름(함수 부분 실행 시 사용할 변수):
+함수 내용
+print(f'{함수 내용} 출력)
+
+def add(x1,x2)
+result - x1+x2
+print(f'{result})
+
+add(1,3)
+
+def 함수 이름 (함수 부분 실행시 사용할 변수):
+함수 내용 
+return  함수 내용
+
+
+result1 = add(1,2)
+result2 = add(2,3)
+
+final_result = add(result1, result2)
+
+result = 함수 이름(함수 부분 실행 시 사용할 변수)) 
+
+
+class super:
+def __init__(self, item):
+self.item - item
+
+def set_item(self,item):
+self.item = item
+
+super = super('아이스크림) #super 의 item 은 아이스크림
+print(super.itme)
+
+super.set_item('과자)
+print(super.item)
+
+
+
+
+### 코딩 테스트에서는 heapq를 써라는것을 말은 안해줌 이건 내가 이해를 해야함
+
+
+### 데이터 환경 절차
+
+(Powershell) cd ../../..
+mkdir data porcess visualiztion
+cd data proces svisualization
+uv init
+uv run main.py
+
+
+-- vs code 열기
+
+Open foler - c/data process visualization
+vscode terminal-new terminal
+terminal 에서 다음 내용 확인
+(data-process-visualization) PS C:\data-process-visualiz
+terminal 에서 uv add ipykernel pandas
+
+
+## 데이터 전처리란
+현재 `df`에는 상품명과 가격이라는 여러 열이 존재합니다.
+
+이처럼 행과 열로 구성된 2차원 표 전체가 **DataFrame**입니다.
+
+이번에는 상품명 하나의 열만 선택해보겠습니다.
+
+
+
+df["product"]처럼 하나의 열을 선택하면 1차원 자료구조인 Series가 반환됩니다.
+
+반면 다음과 같이 이중 대괄호를 사용하면 하나의 열만 선택하더라도 DataFrame 구조를 유지할 수 있습니다.
+
+product_df = df[["product"]]
+
+print(product_df)
+print(type(product_df))
+
+
+## 4. 데이터 불러오기와 저장하기
+
+index=False를 사용하면 Pandas가 자동으로 생성한 0, 1, 2와 같은 인덱스가 별도의 데이터 열로 저장되지 않습니다.
+### data frame 은
+특정 컬럼에서는 index를 컬럼으로 쓸수가 있음
+
+set_index()를 사용하여 직원 번호를 인덱스로 설정해보겠습니다.
+
+다시 일반 컬럼으로 되돌리고 싶다면 reset_index()를 사용할 수 있습니다.
+
+
+###  인덱스 활용 방법
+# 기본 인덱스 (자동 부여: 0, 1, 2, ...)
+df = pd.read_csv('data.csv')
+
+# 사용자 지정 인덱스 설정
+df2 = pd.read_csv('data.csv', index_col='user_id')
+
+# 특정 컬럼을 인덱스로 설정
+df = df.set_index('user_id')
+
+# 인덱스를 다시 일반 컬럼으로 되돌리기
+df = df.reset_index()
+
+## 데이터 미리 보기 및 구조 확인
+
+import pandas as pd
+
+orders = pd.DataFrame({
+    "order_id": [1001, 1002, 1003, 1004, 1005, 1006],
+    "customer": ["민수", "지수", "철수", "영희", "준호", "수진"],
+    "price": [15000, 32000, 8000, 45000, 12000, 27000]
+})
+
+# 데이터 앞부분 확인
+print(orders.head(3))
+
+# 데이터 뒷부분 확인
+print(orders.tail(2))
+
+# 행과 열 개수 확인
+print(orders.shape)
+
+# 컬럼명 확인
+print(orders.columns)
+
+# 데이터 타입 확인
+print(orders.dtypes)
+
+# 컬럼명 변경
+orders = orders.rename(columns={"price": "order_price"})
+print(orders.columns)
+
+데이터 타입 확인과 변환
+
+import pandas as pd
+
+products = pd.DataFrame({
+    "product": ["키보드", "마우스", "모니터"],
+    "price": ["45000", "25000", "300000"], ### 여기는 str으로 되어 있음
+    "sale_date": ["2026-08-01", "2026-08-03", "2026-08-05"]
+})
+
+print(products.dtypes)
+
+products["price"] = products["price"].astype(int) ## 이부분이 string에서 int로 바꿔줌
+products["sale_date"] = pd.to_datetime(products["sale_date"])
+
+print(products.dtypes)
+print(products["price"].mean())
+
+## 데이터 분포 파악
+
+import pandas as pd
+
+orders = pd.DataFrame({
+    "user_id": [101, 102, 101, 103, 104, 102],
+    "category": ["식품", "의류", "식품", "전자기기", "의류", "식품"],
+    "price": [12000, 45000, 18000, 300000, 55000, 15000]
+})
+
+# 수치형 데이터의 통계 요약
+print(orders["price"].describe())
+
+# 카테고리별 주문 횟수
+print(orders["category"].value_counts())
+
+# 실제 주문 고객 수
+print(orders["user_id"].nunique()) ##  고윳값을 보고 싶다면 이걸 써야함
+
+
+## 데이터 선택과 필터림
+
+
+import pandas as pd
+
+customers = pd.DataFrame({
+    "name": ["민수", "지수", "철수", "영희", "준호"],
+    "region": ["서울", "부산", "서울", "서울", "대전"],
+    "point": [1500, 4200, 3500, 5000, 2800]
+})
+
+# 첫 번째 행 선택
+print(customers.iloc[0]) #iloc 는
+print(customers.iloc[0,2]) ## 이런거는 열,행 배열로 출력을 할 수 있도록 함. 
+
+# name과 point 컬럼 선택
+print(customers.loc[:(이게 숫자를 의미 :은 전체 숫자를 추출해줘), ["name", "point"]]) #첫번째 행은 숫자로 넣고, 칼럼은 이름을 직접 넣고 뽑음
+
+
+# 서울에 거주하면서 포인트가 3000 이상인 고객 선택
+vip_customers = customers[
+    (customers["region"] == "서울") & (customers["point"] >= 3000)
+]
+
+customer["region"] ## region 모두를 추출
+customers["region"] == '서울' region중 서울에 해당하는 것을 추출
+customers['point'] #point를 모두 추출
+customers['point'] >= 3000
+
+region 중 서울에 해당하는 것을 만조하면서 point  중 3천 이상인것을 추출
+
+
+print(vip_customers)
+
+
+메서드	기준	예시
+iloc	정수 기반 위치	df.iloc[0, 1] → 0번행, 1번열
+loc	레이블 기반	df.loc[0, 'name'] → 인덱스 0, name 컬럼
+
+주의 할점은 파이썬에서는 'and' 나  'or'로 조건을 걸수 잇었는데 pandas에서는 and=&, or = |
+
+
+
+## concat() 단순 연결
+
+import pandas as pd
+
+july_orders = pd.DataFrame({
+    "order_id": [101, 102],
+    "product": ["노트북", "마우스"]
+})
+
+august_orders = pd.DataFrame({
+    "order_id": [103, 104],
+    "product": ["키보드", "모니터"]
+})
+
+all_orders = pd.concat(
+    [july_orders, august_orders],
+    axis=0, ## 이걸 만약에 1로 바꿔주면 열로 이어붙힘
+    ignore_index=True
+)
+
+print(all_orders)
+
+## merge() 키 기반 병합
+
+import pandas as pd
+
+orders = pd.DataFrame({
+    "order_id": [101, 102, 103],
+    "user_id": [1, 2, 3],
+    "amount": [30000, 15000, 50000]
+})
+
+users = pd.DataFrame({
+    "user_id": [1, 2, 3],
+    "name": ["민수", "지영", "현우"]
+})
+
+result = pd.merge(
+    orders,
+    users,
+    on="user_id",
+    how="left"
+)
+
+print(result)
