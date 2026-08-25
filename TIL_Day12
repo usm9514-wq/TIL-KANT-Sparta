@@ -1,0 +1,393 @@
+## coding test
+
+### 정렬(Sorting)이란?
+
+정렬은 **데이터를 특정 기준에 따라 순서대로 배치하는 방법**입니다.
+
+예를 들어 숫자를 작은 값부터 나열하거나, 상품을 가격이 높은 순서대로 나열해야 할 때 정렬을 사용할 수 있습니다.
+
+Python에서는 대표적으로 `sorted()`를 사용할 수 있습니다.
+
+numbers = [5, 2, 8, 1, 4]
+
+ascending = sorted(numbers)
+descending = sorted(numbers, reverse=True)
+
+print(ascending)
+print(descending)
+
+result
+[1, 2, 4, 5, 8]
+[8, 5, 4, 2, 1]
+
+문자열도 같은 방법으로 정렬할 수 있습니다.
+
+```python
+names = ["Charlie", "Alice", "Bob"]
+
+print(sorted(names))
+```
+
+```
+['Alice', 'Bob', 'Charlie']
+```
+
+숫자의 크기, 이름의 알파벳 순서처럼 **데이터를 일정한 순서로 배치한 뒤 처리해야 할 때** 정렬을 활용할 수 있습니다.
+
+
+
+
+## 3. join(): 인덱스 기반 결합
+
+import pandas as pd
+
+employees = pd.DataFrame({
+        "name": ["민수", "지영", "현우"]
+    },
+    index=[101, 102, 103]
+)
+
+scores = pd.DataFrame(
+    {
+        "score": [85, 92, 78]
+    },
+    index=[101, 102, 103]
+)
+
+result = employees.join(scores, how="left")
+
+print(result)
+
+## 4. 결합 메서드 비교 정리
+
+
+1월 판매 데이터
+상품 | 판매량
+
+2월 판매 데이터
+상품 | 판매량
+
+all_sales = pd.concat(
+    [january_sales, february_sales],
+    ignore_index=True
+
+
+    주문 데이터
+order_id | customer_id
+
+고객 데이터
+customer_id | customer_name
+)
+
+
+고객 데이터
+index | customer_name
+
+등급 데이터
+index | grade
+
+
+result = customers.join(grades, how="left")
+
+
+1. groupby(): 분할-적용-결합
+
+
+import pandas as pd
+
+df = pd.DataFrame({
+    "region": ["서울", "서울", "부산", "부산", "대전"],
+    "sales": [12000, 18000, 10000, 15000, 8000]
+})
+
+# 지역별 주문 금액 합계
+total_sales = df.groupby("region")["sales"].sum().reset_index()
+--------------------------------
+print(total_sales)
+
+  region  sales
+0     대전   8000
+1     부산  25000
+2     서울  30000
+
+**groupby()의 동작 원리**
+
+groupby()는 다음 3단계 프로세스로 동작합니다.
+
+1. **분할(Split)**: 지정한 컬럼 값을 기준으로 데이터를 그룹으로 나눈다.
+2. **적용(Apply)**: 각 그룹에 집계 함수(평균, 합산 등)를 적용한다.
+3. **결합(Combine)**: 결과를 하나의 DataFrame으로 합친다.
+
+##  2. agg(): 다중 집계 함수 적용
+total_quantity = df.groupby('payment_method')['quantity'].sum().rest_index() -->> 이렇게 많이 호출 해야할것을
+
+agg(aggregate)으로 해서 agg 함수
+
+import pandas as pd
+
+df = pd.DataFrame({
+    "store": ["강남점", "강남점", "홍대점", "홍대점", "홍대점"],
+    "order_id": [101, 102, 103, 104, 105],
+    "sales": [30000, 50000, 20000, 40000, 60000]
+})
+
+result = df.groupby("store").agg(
+    total_sales=("sales", "sum"),
+    avg_sales=("sales", "mean"),
+    order_count=("order_id", "count")
+).reset_index()
+
+print(result)
+---------------------------------
+df_customer = pd.merge(
+    customer_master,
+    customer_order_summary,
+    on='customer_id',
+    how='inner'
+)
+
+-----------------------------
+
+### 3. pivot_table(): 데이터 재구성 요약
+
+
+import pandas as pd
+
+df = pd.DataFrame({
+    "day": ["월요일", "월요일", "화요일", "화요일", "수요일"],
+    "payment": ["카드", "계좌이체", "카드", "계좌이체", "카드"],
+    "sales": [30000, 20000, 40000, 15000, 50000]
+})
+
+pivot = pd.pivot_table(
+    df,
+    index="day",
+    columns="payment",
+    values="sales",
+    aggfunc="sum",
+    fill_value=0
+)
+
+print(pivot)
+
+
+
+## sort values():
+
+
+import pandas as pd
+
+df = pd.DataFrame({
+    'product': ['노트북', '마우스', '키보드', '모니터'],
+    'sales': [3200000, 850000, 1200000, 2400000]
+})
+
+result = df.sort_values('sales', ascending=False).reset_index(drop=True)
+
+print(result)
+
+  product    sales
+0     노트북  3200000
+1     모니터  2400000
+2     키보드  1200000
+3      마우스   850000
+
+
+**sort_values()의 개념**
+
+`sort_values()`는 특정 컬럼의 값을 기준으로 DataFrame을 오름차순(기본) 또는 내림차순으로 정렬합니다.
+
+`ascending=False`를 지정하면 내림차순, `ascending=True`는 오름차순(기본값)으로 정렬됩니다.
+
+## 2. sort_index(): 인덱스 기준 정렬
+
+import pandas as pd
+
+sales = pd.Series(
+    [1800000, 2500000, 1300000],
+    index=['Seoul', 'Busan', 'Daegu']
+)
+
+result = sales.sort_index()
+
+print(result)
+
+
+Busan    2500000
+Daegu    1300000
+Seoul    1800000
+dtype: int64
+
+ex)
+pc = df.groupby(
+    'product_category',
+    sort=False
+)['revenue'].sum()
+
+print(pc.sort_index())
+
+3. lambda: 익명 함수
+
+
+import pandas as pd
+
+df = pd.DataFrame({
+    'product': ['노트북', '마우스', '키보드'],
+    'price': [1000000, 50000, 100000]
+})
+
+# 우리가 현재 가지고 있는 정보는 상품명, 가격
+# 고객감사 이벤트로 할인율 적용하려고 해도
+# 모든 상품에 대해 20% 할인을 적용할겁니다.
+
+df['discount_price'] = df['price'].apply(lambda x: x * 0.8)
+
+print(df)
+
+  product    price  discount_price
+0     노트북  1000000        800000.0
+1      마우스    50000         40000.0
+2     키보드   100000         80000.0
+
+
+## 4. split(): 문자열 분리
+
+import pandas as pd
+
+df = pd.DataFrame({
+    'product_code': ['FOOD-001', 'BOOK-002', 'TOY-003']
+})
+
+df[['category', 'number']] = df['product_code'].str.split('-', expand=True)
+
+print(df)
+
+  product_code category number
+0     FOOD-001     FOOD    001
+1     BOOK-002     BOOK    002
+2      TOY-003      TOY    003
+
+
+5. rrule: 날짜 규칙 생성
+
+from dateutil.rrule import rrule, WEEKLY, FR
+from datetime import datetime
+
+report_dates = list(
+    rrule(
+        WEEKLY,
+        count=4,
+        byweekday=FR,
+        dtstart=datetime(2024, 3, 1)
+    )
+)
+
+for date in report_dates:
+    print(date.strftime('%Y-%m-%d'))
+
+2024-03-01
+2024-03-08
+2024-03-15
+2024-03-22
+
+
+
+
+`rrule`는 `dateutil` 라이브러리의 기능으로, 반복되는 날짜 규칙을 정의하고 날짜 시퀀스를 생성할 수 있습니다.
+
+매주 월요일, 매월 첫째 일 등 규칙적인 날짜 목록이 필요할 때 유용하게 사용됩니다.
+
+
+
+## 1. EDA란?
+
+데이터를 받자마자 매출을 계산하기보다 먼저 데이터가 어떤 모습인지 살펴보는 것이 좋습니다. 주문 금액에 비정상적인 값은 없는지, 데이터가 빠진 곳은 없는지, 값들이 어느 정도 범위에 분포하는지 확인하는 과정이 바로 EDA(탐색적 데이터 분석) 입니다.
+
+
+
+import pandas as pd
+
+orders = pd.DataFrame({
+    "customer": ["A", "B", "C", "D", "E"],
+    "amount": [25000, 32000, 28000, None, 500000]
+})
+
+print(orders)
+print()
+print(orders.describe())
+
+  customer    amount
+0        A   25000.0
+1        B   32000.0
+2        C   28000.0
+3        D       NaN
+4        E  500000.0
+
+              amount
+count       4.000000
+mean   146250.000000
+std    235883.446635
+min     25000.000000
+25%     27250.000000
+50%     30000.000000
+75%    149000.000000
+max    500000.000000
+
+
+**EDA(Exploratory Data Analysis, 탐색적 데이터 분석)**
+
+EDA는 데이터를 분석하기 전에 데이터의 특성, 분포, 패턴을 시각화와 통계를 통해 파악하는 과정입니다.
+
+모델링이나 예측 이전에 반드시 수행해야 하는 필수 단계로, 이 과정에서 얻은 인사이트가 분석 방향을 결정합니다.
+
+## EDA의 3가지 핵심 목적
+
+
+목적	설명
+모델링 전 데이터 이해	데이터의 구조, 분포, 변수 간 관계를 파악
+이상치/결측치 발견	데이터 품질 문제를 조기에 발견하고 대응
+특성 선택 힌트	어떤 변수가 분석/모델에 중요한지 파악
+
+
+## 3. EDA 프로세스
+
+**1단계. 질문(Question)**
+
+분석하고자 하는 질문을 먼저 정의합니다.
+
+"월별 매출은 어떻게 변하고 있는가?", "어떤 고객군의 이탈률이 높은가?" 같이 구체적이고 답할 수 있는 질문이어야 합니다.
+
+<aside>
+2️⃣
+
+**2단계. 탐색(Exploration)**
+
+질문에 답하기 위해 데이터를 시각화하고 통계를 계산합니다.
+
+hist(), boxplot(), scatter plot, groupby() 등 다양한 도구를 활용하여 패턴을 찾습니다.
+
+</aside>
+
+<aside>
+3️⃣
+
+**3단계. 인사이트(Insight)**
+
+탐색 결과에서 의미 있는 패턴, 이상치, 관계를 발견하고 해석합니다.
+
+"20대 여성 고객의 구매 전환율이 다른 군에 비해 3배 높다" 같은 구체적인 발견이 인사이트입니다.
+
+</aside>
+
+<aside>
+4️⃣
+
+**4단계. 새 질문(New Question)**
+
+인사이트에서 새로운 질문이 생기면 1단계로 돌아가 반복합니다.
+
+"왜 20대 여성의 전환율이 높을까?" → 다시 탐색 → 새 인사이트... 이 과정이 EDA의 본질입니다.
+
+</aside>
+
+
