@@ -1,0 +1,397 @@
+Brute Force
+
+4개의 숫자가 존재하는 리스트가 존재하는이 리스트의 인덱스는 0,1,2,3
+
+[0,1], [0,2], [0,3]
+[1,2], [1,3]
+[2,3]
+
+numbers = [2, 4, 6, 7]
+
+for i in range(len(numbers)): ## for i in range(4): <--- 여기서는 0,1,2,3
+    for j in range(i + 1, len(numbers)): # for j in range)=(i+1):
+                                            #i=0, for j in range (1,4)<-- 1,2,3
+        if numbers[i] + numbers[j] == 10:  # number[0]+ number[1] or number[2] or number[0] +number[3] ㅍ  (만약 i 가 3인경우에는 종료)
+            print(numbers[i], numbers[j])
+
+
+파이썬 리스트의 특성중 하나는 인덱싱이 된다
+리스트[숫자] <-- -1에 해당하는 성분을 줍니다
+
+item_list =['과자, '아이스크림' , '사탕']
+
+len(item_list) <-- 리스트의 성분 개수를
+
+# for i in rnage(len(리스트)) :  i는 0 부터 -1 까지 반복
+
+range(10)<-- 0-9
+range(15)<-- 0-14
+range(n)<-- 0~ n-1
+
+
+for index in range(len(리스트 개수)):
+
+for index in range(len(리스트 개수)):
+
+
+
+3개의 숫자가 있는데 서로 다른 두개의 숫자를 골라 우너하는 숫자를 만들어주세요
+
+3개의 숫자가 있는 리스트다
+-> 인덱스 기준 0,1,2
+
+[0,1], [0,2]
+------------------------------------
+missing_count = df.isna().sum()
+
+missing_count = missing_count.sort_values(
+    ascending=False
+)
+
+print(missing_count)
+------------------------------
+
+##  2. 중복 데이터(Duplicate Data)
+
+import pandas as pd
+
+orders = pd.DataFrame({
+    "order_id": [1001, 1002, 1002, 1003],
+    "customer": ["민수", "지수", "지수", "민수"],
+    "product": ["키보드", "마우스", "마우스", "키보드"]
+})
+
+print(orders)
+print()
+print(orders.duplicated())
+
+   order_id customer product
+0      1001       민수     키보드
+1      1002       지수      마우스
+2      1002       지수      마우스
+3      1003       민수     키보드
+
+0    False
+1    False
+2     True
+3    False
+dtype: bool
+
+중복 데이터는 동일한 정보가 데이터셋 내에 두 번 이상 기록된 상태를 말해요.
+
+완전히 동일한 행(exact duplicate)과, 일부만 다른 부분 중복(partial duplicate)이 있어요.
+
+중복 데이터는 집계 통계를 왜곡시키고, 모델 학습 시 특정 데이터에 과대한 가중치를 부여하는 문제를 일으킵니다.
+
+## **중복 데이터 발생 원인**
+
+중복 데이터는 대부분 데이터 수집 및 통합 과정의 기술적 문제에서 발생해요.
+
+- **ETL 파이프라인 오류**: 데이터를 추출(Extract)·변환(Transform)·적재(Load)하는 과정에서 동일 데이터가 반복 처리됨
+- **시스템 통합 오류**: 여러 데이터 소스를 병합할 때 중복 레코드가 포함됨
+- **재시도 로직 오류**: 네트워크 오류 등으로 동일한 트랜잭션이 두 번 기록됨
+- **수동 입력 실수**: 사람이 직접 입력하는 과정에서 동일 항목을 두 번 입력함
+
+duplicated_result = df.duplicated()
+
+print(duplicated_result.head())
+
+print(duplicated_result.sum())
+
+
+
+
+##  3. 이상치(Outlier)
+
+
+import pandas as pd
+
+work = pd.DataFrame({
+    "employee": ["민수", "지수", "현우", "서연", "준호"],
+    "work_hours": [8, 7, 9, 8, 80]
+})
+
+print(work)
+print()
+print(work["work_hours"].describe())
+
+
+  employee  work_hours
+0       민수           8
+1       지수           7
+2       현우           9
+3       서연           8
+4       준호          80
+
+count     5.000000
+mean     22.400000
+std      32.204037
+min       7.000000
+25%       8.000000
+50%       8.000000
+75%       9.000000
+max      80.000000
+Name: work_hours, dtype: float64
+
+- 이상치는 전체적인 데이터 분포에서 크게 벗어난 값입니다.
+- 이상치는 평균과 같은 통계량에 큰 영향을 줄 수 있습니다.
+- 이상치를 발견하면 무조건 제거하지 말고 입력 오류, 측정 오류, 실제 값인지 먼저 확인해야 합니다.
+
+
+## 1. 결측치 처리 방법 4가지
+
+- 결측치가 매우 적고 무작위로 발생했다면 → **행 삭제**
+- 이상치가 거의 없는 수치형 데이터라면 → **평균 대체**
+- 큰 이상치가 존재하는 수치형 데이터라면 → **중앙값 대체**
+- 범주형 데이터라면 → **최빈값 대체**
+
+
+방법	                        핵심 원리	         적합 상황	                            주의사항
+행 삭제 (dropna)	결측치가 있는 행 전체 제거	결측 비율이 낮을 때 (5% 미만), MCAR일 때	결측 비율이 높으면 데이터 손실 과다
+평균 대체 (Mean Imputation)	해당 컬럼의 평균값으로 채움	수치형 데이터, 정규분포에 가까울 때	이상치가 있으면 평균이 왜곡됨; 분산 감소
+중앙값 대체 (Median Imputation)	해당 컬럼의 중앙값으로 채움	수치형 데이터, 이상치가 있을 때	분산 감소 문제는 동일
+최빈값 대체 (Mode Imputation)	해당 컬럼에서 가장 자주 등장하는 값으로 채움	범주형 데이터	특정 값 쏠림 현상 심화 가능
+
+ 
+
+
+
+##2. Python으로 결측치 처리하기
+
+
+import pandas as pd
+
+df = pd.DataFrame({
+    "이름": ["민수", "지수", "철수", "영희"],
+    "근속연수": [2, None, 5, 10],
+    "부서": ["영업", "개발", None, "개발"]
+})
+
+# 근속연수 결측치를 중앙값으로 대체
+df["근속연수"] = df["근속연수"].fillna(df["근속연수"].median())
+
+# 부서가 없는 직원 행 제거
+df = df.dropna(subset=["부서"])
+
+print(df)
+
+
+   이름  근속연수  부서
+0  민수    2.0  영업
+1  지수    5.0  개발
+3  영희   10.0  개발
+
+
+- `dropna()`는 결측치가 있는 행이나 열을 제거할 때 사용합니다.
+- `subset`을 지정하면 특정 컬럼의 결측치만 기준으로 삭제할 수 있습니다.
+- `fillna()`는 결측치를 특정 값이나 평균·중앙값·최빈값 등으로 대체할 때 사용합니다.
+
+----------------------
+import pandas as pd
+
+df = pd.read_csv(
+    './ecommerce_orders_offline.csv'
+)
+
+print(
+    '처리 전:',
+    df['region'].isna().sum()
+)
+
+mode_region = df['region'].mode()[0]-> 최빈값으로 설정
+
+df['region'] = df['region'].fillna(
+    mode_region
+)
+
+print(
+    '처리 후:',
+    df['region'].isna().sum()
+)
+
+mode를 region에서는 써줘야함 왜냐하면 region이 int이 아니고 str이기때문에
+
+---------------------------
+
+
+## 3. 처리 방법 선택의 판단 근거 기록
+
+
+import pandas as pd
+
+df = pd.DataFrame({
+    "나이": [25, 30, None, 35, 40],
+    "구매금액": [30000, 50000, None, 70000, 800000],
+    "회원등급": ["일반", "VIP", "일반", None, "일반"]
+})
+
+# [결측치 처리 근거]
+# 나이: 이상치가 없고 값의 분포가 크게 치우치지 않음 → 평균 대체
+# 구매금액: 큰 금액의 이상치가 존재함 → 중앙값 대체
+# 회원등급: 범주형 데이터이며 '일반'이 가장 많이 등장함 → 최빈값 대체
+
+df["나이"] = df["나이"].fillna(df["나이"].mean())
+df["구매금액"] = df["구매금액"].fillna(df["구매금액"].median())
+df["회원등급"] = df["회원등급"].fillna(df["회원등급"].mode()[0])
+
+print(df)
+
+
+
+     나이      구매금액 회원등급
+0  25.0   30000.0   일반
+1  30.0   50000.0   VIP
+2  32.5   60000.0   일반
+3  35.0   70000.0   일반
+4  40.0  800000.0   일반
+
+
+
+**핵심 개념**
+
+- 결측치 처리 방법뿐 아니라 선택한 이유도 기록하는 것이 중요합니다.
+- 판단 근거를 기록하면 다른 분석가가 전처리 과정을 이해하고 재현하기 쉽습니다.
+- 통계적 판단뿐 아니라 결측치가 발생한 원인도 함께 기록하는 것이 좋습니다.
+
+
+
+
+
+
+결측치 처리는 분석가의 판단이 개입되는 영역이에요.
+
+같은 데이터라도 평균 대체를 선택한 분석가와 중앙값 대체를 선택한 분석가는 서로 다른 결과를 얻을 수 있어요.
+
+따라서 어떤 방법을 선택했는지, 그리고 **왜** 그 방법을 선택했는지 코드 주석이나 분석 문서에 반드시 기록해야 합니다.
+
+이 기록은 팀 협업 시 재현 가능성을 보장하고, 이후 모델 검토 시 결정 근거를 제공해요.
+
+이때 판단 근거에는 통계적 이유뿐 아니라 "이 결측이 왜 생겼는가"에 대한 원인 진단 결과도 함께 남겨야 해요. 원인이 파이프라인 문제였다면 그 사실과 담당팀 공유 여부까지 기록하는 것이 현업 표준입니다.
+
+
+
+
+## 1. IQR 방법
+
+
+import pandas as pd
+
+df = pd.DataFrame({
+    "주문금액": [20000, 22000, 25000, 27000, 30000, 32000, 35000, 38000, 40000, 300000]
+})
+
+Q1 = df["주문금액"].quantile(0.25)
+Q3 = df["주문금액"].quantile(0.75)
+IQR = Q3 - Q1
+
+lower_bound = Q1 - 1.5 * IQR
+upper_bound = Q3 + 1.5 * IQR
+
+outliers = df[
+    (df["주문금액"] < lower_bound) |
+    (df["주문금액"] > upper_bound)
+]
+
+print(f"정상 범위: {lower_bound:.0f}원 ~ {upper_bound:.0f}원")
+print(outliers)
+
+
+정상 범위: 5000원 ~ 57000원
+   주문금액
+9  300000
+
+
+
+
+
+**IQR(Interquartile Range) 이상치 탐지 원리**
+
+IQR은 데이터의 중간 50%를 나타냄으로써, 데이터 분포의 퍼짐 정도를 보여주고 이상치에 강한 탐지 방법이에요.
+
+- Q1(제1 사분위수): 하위 25% 값
+- Q3(제3 사분위수): 하위 75% 값
+- IQR = Q3 - Q1
+- 이상치 범위: **Q1 - 1.5 × IQR 미만** 또는 **Q3 + 1.5 × IQR 초과**
+
+
+
+import pandas as pd
+import numpy as np
+
+df = pd.DataFrame({'값': [10, 12, 11, 13, 9, 100, 11, 12, 10, 8]})
+
+Q1 = df['값'].quantile(0.25)
+Q3 = df['값'].quantile(0.75)
+IQR = Q3 - Q1
+
+lower_bound = Q1 - 1.5 * IQR
+upper_bound = Q3 + 1.5 * IQR
+
+# 이상치 탐지
+outliers = df[(df['값'] < lower_bound) | (df['값'] > upper_bound)]
+print(f'IQR 범위: {lower_bound:.2f} ~ {upper_bound:.2f}')
+print(f'이상치:\n{outliers}')
+
+
+## 2. Z-score 방법
+
+import pandas as pd
+import numpy as np
+from scipy import stats
+
+df = pd.DataFrame({
+    "상담시간": [
+        8, 9, 10, 11, 10, 9, 12, 10, 11, 9,
+        10, 8, 11, 10, 9, 12, 10, 11, 9, 10,
+        8, 10, 11, 9, 10, 12, 9, 11, 10, 60
+    ]
+})
+
+z_scores = np.abs(stats.zscore(df["상담시간"]))
+
+outliers = df[z_scores > 3]
+
+print(outliers)
+
+
+    상담시간
+29    60
+
+**Z-score 이상치 탐지 원리**
+
+Z-score는 각 값이 평균으로부터 표준편차의 배수에 해당하는지 측정하는 방법이에요.
+
+- Z-score 공식: **(x - 평균) / 표준편차**
+- 기준: `|z| > 3` 이면 이상치로 판단
+- 정규분포를 따른다면 99.7%의 데이터는 평균 ±3 표준편차 내에 존재하기 때문에, 그 밖을 이상치로 보는 원리예요.
+
+
+Winsorizing이 제거보다 덜 익숙한데, 어떤 상황에서 더 유용한가요?
+
+데이터를 보존하면서 이상치의 영향을 줄여야 하는 상황에서 유용해요.
+
+예를 들어 실무에서 이상치를 포함한 산업 데이터를 분석할 때, 이상치 행을 제거하면 샘플 크기가 작아지는 문제가 생길 수 있어요.
+
+이런 경우 Winsorizing을 사용하면 데이터 수를 유지하면서도 이상치가 평균이나 표준편차를 과도하게 왜곡하는 것을 막을 수 있어요.
+
+
+---------------------------------
+Handling Pandas Dataframe
+
+1. read Data
+2. shape 찍어본다 == 행 개수, 열 개수 숫자로 본다.
+3. info 찍어본다.
+4. descrbibe 찍어본다.
+5. df.head() / df.tail()
+6. df.isna().sum() (또는 df.isnull().sum())
+7. df.duplicated().sum()
+8. df.nunique() 및 df['col'].value_counts()
+9. df.columns
+
+
+---------------------------
+`duplicated()`는 각 행이 이전에 등장한 행과 중복되는지를 True / False로 반환하는 함수입니다.
+
+첫 번째로 등장한 행은 False, 이후 동일한 행은 True로 표시됩니다. 이 결과를 Boolean Indexing에 활용해 중복 행만 필터링할 수 있어요.
+
+
