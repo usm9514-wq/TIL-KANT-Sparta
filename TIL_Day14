@@ -1,0 +1,258 @@
+## Greedy
+
+def solution(models, limit):
+    # 1) 오름차순 정렬: 가벼운 모델부터 담기 위해
+    #    [4,2,5,1] -> [1,2,4,5]
+    models = sorted(models)
+
+    count = 0        # 지금까지 올린 모델 개수
+    used_memory = 0  # 지금까지 사용한 메모리 총합
+
+    # 2) 작은 것부터 하나씩 순회
+    for memory in models:
+        # 이 모델을 추가해도 한도를 넘지 않으면 담는다
+        if used_memory + memory <= limit:
+            used_memory += memory
+            count += 1
+        else:
+            # 3) 정렬돼 있으므로 지금 것이 안 들어가면
+            #    뒤에 남은 건 전부 더 크다 -> 볼 필요 없이 중단
+            break
+
+    return count
+
+
+print(solution([4, 2, 5, 1], 7))  # 원래 코드의 soltuion은 오타
+
+핵심 원리 (그리디)
+
+"개수를 최대로" 하는 문제라서, 무게(메모리)가 작은 것부터 넣는 게 항상 최적입니다. 직관적으로는 이렇게 증명됩니다: 최적해에 큰 모델 X가 들어있는데 아직 안 쓴 더 작은 모델 Y가 있다면, X를 Y로 바꿔도 개수는 그대로면서 메모리는 오히려 남습니다. 즉 작은 것부터 고르는 해가 최소한 다른 어떤 해만큼은 좋습니다.
+
+실행 흐름
+
+순서	memory	used_memory + memory	≤ 7?	used_memory	count
+1	    1	    0+1=1	                O	        1	     1
+2	    2	    1+2=3	                O	        3	     2
+3	    4	    3+4=7	                O	        7	    3
+4	    5	    7+5=12	                X	        —    	break
+
+결과는 3.
+
+break를 쓴 이유
+
+정렬되어 있기 때문에 현재 값이 안 들어가면 뒤에 오는 값들은 전부 그것보다 크거나 같아서 무조건 안 들어갑니다. 그래서 continue로 계속 훑을 필요가 없습니다. (만약 정렬하지 않았다면 break는 틀린 답을 내고, continue를 써야 합니다.)
+
+시간복잡도: 정렬이 지배해서 O(n log n). 반복문 자체는 O(n)입니다
+
+
+
+class AImodel:                       # 클래스 = 설계도 (붕어빵 틀)
+    def __init__(self, path):        # 생성자: 객체가 만들어질 때 자동 실행
+        self.path = path             # 인스턴스 변수: 이 객체만의 데이터
+        self.model = self.load_model(self.path)  # 만들어지자마자 모델 로딩
+
+    def load_model(self, path):      # 메서드: 이 객체가 할 수 있는 동작
+        self.model = 모델_불러오는_코드
+        return self.model            # ← 원래 코드엔 이게 빠져 있음 (아래 설명)
+
+    def function1(self):             # 메서드 이름엔 공백 못 씀
+        기능_구현
+
+    def function2(self):
+        기능_구현
+
+
+aimodel1 = AImodel(model1_path)      # 인스턴스 생성 → __init__ 자동 호출
+
+
+aimodel1 = AImodel(model1_path)
+  ↓
+__init__(self=새 객체, path=model1_path) 실행
+  ↓
+self.path 저장
+  ↓
+self.load_model(self.path) 호출 → 무거운 로딩 1회 수행
+  ↓
+self.model에 저장
+  ↓
+이후 aimodel1.function1() 은 이미 로딩된 self.model 재사용
+
+
+###3. 중복 데이터 제거: drop_duplicates()
+
+**drop_duplicates() 함수**
+
+`drop_duplicates()`는 중복 행을 제거하고 고유한 행만 남기는 함수입니다.
+
+`duplicated()`로 중복을 먼저 확인한 뒤, `drop_duplicates()`로 제거하는 것이 일반적인 흐름이에요.
+
+
+# 전체 행 기준 중복 제거 (기본: 첫 번째 행 유지)
+df_clean = df.drop_duplicates()
+
+# 특정 컬럼 기준 중복 제거
+df_clean = df.drop_duplicates(subset=['user_id'])
+
+# 마지막 등장 행을 유지하고 싶을 때
+df_clean = df.drop_duplicates(subset=['user_id'], keep='last')
+
+# 원본에 직접 적용
+df.drop_duplicates(inplace=True)
+
+
+
+
+1. 히스토그램
+
+
+
+**히스토그램이란?**
+
+연속형 수치 데이터를 일정한 구간(bin)으로 나누고, 각 구간에 속하는 데이터의 빈도(개수)를 막대로 표시하는 차트입니다.
+
+X축은 값의 범위, Y축은 빈도를 나타냅니다.
+
+막대그래프와 달리 히스토그램의 막대 사이에는 간격이 없습니다.
+
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+data = np.random.randn(1000)
+
+plt.hist(data, bins=30, color='steelblue', edgecolor='white')
+plt.xlabel('값')
+plt.ylabel('빈도')
+plt.title('히스토그램 예시')
+plt.show()
+
+
+
+1. 산점도
+
+**핵심 개념**
+
+- 산점도는 두 수치형 변수의 관계를 점으로 표현합니다.
+- 오른쪽 위 방향으로 점들이 분포하면 양의 관계를 의심할 수 있습니다.
+- 점들이 직선에 가깝게 모일수록 강한 선형 관계를 나타냅니다.
+
+
+**산점도(Scatter Plot)란?**
+
+두 수치형 변수의 값을 각각 X축과 Y축에 배치하고, 각 데이터 포인트를 점으로 표시하는 차트입니다.
+
+점들의 분포 패턴을 통해 두 변수 간의 관계 방향(양/음)과 강도(강/약)를 파악할 수 있습니다.
+
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+x = np.random.randn(100)
+y = 2 * x + np.random.randn(100)
+
+plt.scatter(x, y, alpha=0.6, color='steelblue')
+plt.xlabel('X 변수')
+plt.ylabel('Y 변수')
+plt.title('산점도 예시')
+plt.show()
+
+
+
+2. 피어슨 상관계수
+
+
+
+관계수가 +1에 매우 가까운 값으로 나타납니다.
+
+즉, 이 데이터에서는 배달 거리가 증가할수록 배달 시간도 증가하는 **강한 양의 선형 관계**가 나타난다고 해석할 수 있습니다.
+
+하지만 높은 상관계수가 나왔다고 해서 배달 거리만이 배달 시간의 원인이라고 단정할 수는 없습니다. 교통량이나 날씨 같은 다른 요인이 함께 영향을 줄 수도 있습니다.
+
+**핵심 개념**
+
+- 피어슨 상관계수는 -1부터 +1 사이의 값을 가집니다.
+- 양수는 양의 선형 관계, 음수는 음의 선형 관계를 의미합니다.
+- 절댓값이 1에 가까울수록 선형 관계가 강합니다.
+
+
+## 3. 상관관계 히트맵
+
+
+**핵심 개념**
+
+- `df.corr()`은 수치형 변수 간 상관계수를 계산합니다.
+- `sns.heatmap()`을 사용하면 상관계수 행렬을 시각적으로 확인할 수 있습니다.
+- 히트맵의 대각선은 자기 자신과의 상관관계이므로 1입니다.
+
+**df.corr()와 sns.heatmap()**
+
+여러 수치형 변수들 간의 상관계수를 한 번에 계산하고 시각화하는 가장 효율적인 방법입니다.
+
+히트맵의 색상(진할수록 강한 상관)과 숫자(annot=True)를 함께 보면 빠르게 관계를 파악할 수 있습니다.
+
+
+
+import seaborn as sns
+import matplotlib.pyplot as plt
+import pandas as pd
+import numpy as np
+
+np.random.seed(42)
+df = pd.DataFrame({
+    '공부시간': np.random.randn(100),
+    '시험점수': np.random.randn(100),
+    '수면시간': np.random.randn(100),
+    '운동시간': np.random.randn(100)
+})
+df['시험점수'] = df['공부시간'] * 0.8 + np.random.randn(100) * 0.3
+
+corr = df.corr()
+
+plt.figure(figsize=(8, 6))
+sns.heatmap(corr, annot=True, fmt='.2f', cmap='coolwarm',
+            vmin=-1, vmax=1, center=0)
+plt.title('상관관계 히트맵')
+plt.show()
+
+### 3. 그룹 막대그래프
+
+**핵심 개념**
+
+- `hue`를 사용하면 하나의 범주 안에서 여러 그룹을 비교할 수 있습니다.
+- 그룹 막대그래프는 두 개의 범주형 변수를 함께 비교할 때 유용합니다.
+- 그룹이 너무 많아지면 차트가 복잡해지므로 비교할 그룹을 적절히 선택해야 합니다.
+
+
+## 에러바의 의미
+
+`sns.barplot()`에는 기본적으로 에러바(Error Bar)가 표시됩니다.
+
+
+   에러바는 **막대로 나타낸 평균값의 불확실성**을 보여줍니다.
+
+Seaborn의 기본 설정에서는 **95% 신뢰구간(Confidence Interval)**을 나타냅니다.
+
+- **에러바가 짧을수록**: 평균값을 비교적 정밀하게 추정하고 있음을 의미합니다.
+- **에러바가 길수록**: 평균값 추정의 불확실성이 상대적으로 크다는 의미입니다.
+
+에러바는 **평균이 어느 정도의 범위에 있을 것으로 추정되는지** 시각적으로 보여주는 역할을 합니다.
+
+
+
+##  3. 이동평균(Rolling Average)
+
+**핵심 개념**
+
+- `rolling(window=N)`의 `window`는 계산에 사용할 데이터 포인트 개수입니다.
+- 이동평균을 사용하면 데이터의 짧은 변동을 줄이고 전체 추세를 파악하기 쉽습니다.
+- `window=3`이면 첫 2개 값처럼 데이터가 충분하지 않은 구간은 기본적으로 `NaN`이 됩니다.
+
+**이동평균이란?**
+
+특정 포인트에서 이전 N개 데이터의 평균을 연속적으로 계산한 값입니다.
+
+데이터의 단기적 노이즈를 줄여주고 전체적인 추세를 더 명확하게 보여줍니다.
+
+window 파라미터가 클수록 더 부드러운 곡선이 되지만, 너무 크면 실제 변화를 놓칠 수 있습니다.
+
+
