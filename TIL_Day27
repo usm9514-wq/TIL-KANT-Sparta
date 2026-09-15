@@ -1,0 +1,138 @@
+가설 검정 흐름 요약
+
+1. 가설 설정 (귀무 가설/대립 가설)
+2. 데이터에 대해 검정 수행 
+3. p value 와 유의수준 확인 
+→ p value < 유의수준: 귀무가설 기각 = 대립가설에 대한 통계적 근거 존재
+→ p value ≥ 유의수준: 귀무가설 기각 못함 = 귀무가설 기각에 대한 근거 부족
+
+
+
+3. 독립표본 t-검정
+
+from scipy import stats
+
+t_stat, p_value = stats.ttest_ind(
+    group_a,
+    group_b,
+    equal_var=False
+)
+
+print(f"t 통계량: {t_stat:.3f}")
+print(f"p-value: {p_value:.3f}")
+
+
+equal_var=False로 설정하면 두 집단의 분산이 같다고 가정하지 않는 Welch's t-test를 사용합니다.
+
+
+## 독립표본 t-검정
+
+**독립표본 t-검정(Independent samples t-test)**은 **서로 다른 두 집단의 평균을 비교**할 때 사용하는 방법입니다.
+
+예를 들어 다음과 같은 상황에서 사용할 수 있습니다.
+
+A 광고 고객 vs B 광고 고객
+서울 지점 고객 vs 부산 지점 고객
+신규 고객 vs 기존 고객
+
+Python에서는 stats.ttest_ind()를 이용하여 검정할 수 있습니다.
+
+stats.ttest_ind(
+    그룹_A,
+    그룹_B,
+    equal_var=False
+)
+
+
+
+독립표본 t-검정에는 두 집단의 분산이 같다고 가정하는 방법과 그렇지 않은 **Welch's t-test**가 있습니다.
+
+두 집단의 분산이 같다고 가정하기 어렵거나 확실하지 않은 경우에는 `equal_var=False`를 사용하여 Welch's t-test를 적용할 수 있습니다.
+
+어떤 방법을 사용하더라도 기본적인 결과 해석은 동일합니다.
+
+
+
+p-value < 유의수준
+→ 귀무가설 기각
+
+p-value ≥ 유의수준
+→ 귀무가설을 기각할 근거가 부족
+
+즉, 서로 다른 두 집단의 평균을 비교하는 상황인지 확인하고 독립표본 t-검정을 수행한 뒤, p-value를 해석하면 됩니다.
+
+
+
+구분	등분산 가정 t-검정 (Student's t)	이분산 t-검정 (Welch's t)
+전제	두 집단의 분산이 같음	두 집단의 분산이 달라도 됨
+자유도	단순 합산(n1 + n2 - 2)	보정된 자유도 사용
+scipy 옵션	equal_var=True	equal_var=False
+권장 상황	등분산 검정을 통과한 경우	분산이 다르거나 확신이 없는 경우
+
+
+##  5. t-검정의 주요 가정과 점검 방법
+
+
+가정	의미	확인 방법
+정규성	데이터가 정규분포에서 크게 벗어나지 않는지 확인	Shapiro-Wilk 검정 등
+등분산성	비교하는 집단의 분산이 비슷한지 확인	Levene 검정 등
+독립성	관측값들이 서로 독립적인지 확인	데이터 수집 구조 확인
+
+
+
+모든 t-검정에서 세 가지를 동일하게 적용하는 것은 아닙니다.
+
+특히 **독립표본 t-검정**에서 두 집단의 분산이 같다고 가정하기 어렵다면 `equal_var=False`로 설정하여 **Welch's t-test**를 사용할 수 있습니다.
+stats.ttest_ind(
+    group_a,
+    group_b,
+    equal_var=False
+)
+
+
+
+
+from scipy import stats
+
+group_a = [21, 23, 20, 24, 22, 25, 21, 23, 22, 24]
+group_b = [27, 29, 26, 30, 28, 31, 27, 29, 28, 30]
+
+_, p_a = stats.shapiro(group_a)
+_, p_b = stats.shapiro(group_b)
+_, p_levene = stats.levene(group_a, group_b)
+
+print(f"A 그룹 정규성 p-value: {p_a:.3f}")
+print(f"B 그룹 정규성 p-value: {p_b:.3f}")
+print(f"등분산성 p-value: {p_levene:.3f}")
+
+- Shapiro-Wilk 검정의 p-value가 `0.05`보다 크다면 **정규성을 위반한다고 볼 충분한 근거가 없습니다.**
+- Levene 검정의 p-value가 `0.05`보다 크다면 **등분산성을 위반한다고 볼 충분한 근거가 없습니다.**
+- 가설검정의 종류는 달라졌지만, 여기에서도 **p-value와 유의수준을 비교하여 결과를 해석하는 기본적인 방법은 동일합니다.**
+
+
+
+
+변동성 : 값들이 얼마나 제각각인지
+표준편차: 평균 주변에 값이 얼마나 퍼져 있는지
+-> 표준편차가 크면 값들이 차이가 전반적으로 크다.
+
+
+분산 : 값들의 퍼짐 정도, 표준편차를 제곱한 값
+-> 시험 점수의 표준편차가 10점이면 분산은 100점입니다.
+
+통계적 유의성: 검정 결과가 미리 정한 기각 기준을 충족하여, 차이를 뒷받침할 통계적 근거가 있다는 뜻
+
+Volatility (Variability): How much the values differ from one another.Standard Deviation 
+($\sigma$ or $s$): How widely the values are spread out around the mean (average).
+ Takeaway: A larger standard deviation means there is a wider gap between overall data points.
+ Variance ($\sigma^2$ or $s^2$): The degree of spread in the data, calculated by squaring the standard deviation.
+           Example: If the standard deviation of test scores is 10 points, the variance is 100 points squared ($10^2$).
+
+Statistical Significance: The test result meets a predetermined threshold (rejection region), 
+meaning there is sufficient statistical evidence to support that a real difference exists—rather than just random chance.
+
+
+Practical Example
+If you test a new marketing button and find a 3% higher click rate with $p = 0.02$:
+Since $0.02 < 0.05$, the result is statistically significant.
+This means there is only a 2% chance the increase was random noise, giving you strong confidence that the new button actually works better.
