@@ -1,0 +1,206 @@
+## python 에서 DFS 사용하기
+
+DFS는 재귀 함수 구현할 수도 있지만, Python의 list를 스택 처럼 사용해서 반복문으로 구현할 수도 있습니다.
+
+
+network = {
+    1: [2, 3],
+    2: [1, 4],
+    3: [1, 5],
+    4: [2],
+    5: [3]
+}
+
+
+stakc = [1]
+visited = set()
+
+while stack:
+    current = stack.pop()
+    
+    if current not in visited:
+        visited.add(current)
+
+            for next_node in network[current]:  #network[current] = []
+                                                # next_node = 
+            if next_node not in visited:
+            stack.append(next_node)
+
+
+
+class NetworkExplorer:
+def __init__(self, network):
+    self.network = network
+
+network_a = {
+    1: [2, 3],
+    2: [1, 4],
+    3: [1],
+    4: [2],
+    5: []
+}
+
+
+##  일원배치 분산분석(One-way ANOVA)
+
+
+
+f_stat, p_value = stats.f_oneway(
+
+
+이거는 
+귀무가설  결과가 같을 것이다
+대립 가설 결과가 다를 것이다.
+
+p value가 유의 수준이 안 넘으면
+
+"집단 간 결과가 '다르다'고 말할 수 있는 통계적 근거가 부족하다." (O)
+
+
+
+--------------------------------------
+
+2. Correlation
+
+"X and Y move together."
+
+Definition: A statistical relationship where a change in variable $X$ is associated with a change in variable $Y$.
+
+Key Feature: There is no direction or proof of cause. It simply shows that the two variables trend together (either both go up, or one goes up while the other goes down).
+
+Relationship: $X \leftrightarrow Y$ (Mutual association without direction)
+
+Example: Ice cream sales ($X$) and shark attacks ($Y$) both rise in the summer. Neither causes the other; they just move together because of a third variable (warm weather).
+
+
+------------------------------------------
+3. Causation (Causality)
+
+
+"X directly affects/causes Y."
+
+
+Definition: A direct cause-and-effect relationship where variable $X$ (Cause / Independent variable) directly produces a change in variable $Y$ (Effect / Dependent variable).
+
+Key Feature: There is a clear direction of influence. If you change $X$, $Y$ is guaranteed to respond because of the causal link.
+
+
+Relationship: $X \rightarrow Y$ (Direct cause-and-effect)
+
+Example: Heavy rainfall ($X$) directly causes the river level ($Y$) to rise.
+
+
+
+
+
+## 가설 검정 흐름 요약
+
+ex) 목적: 어떤걸 말할때 통계적으로 합리적이다라는 이야기를 하기 위함
+
+
+
+##  1. 단순선형회귀 모델의 구축과 회귀계수 해석
+
+
+- 단순선형회귀는 **하나의 독립변수와 하나의 종속변수 사이의 관계**를 직선으로 표현합니다.
+- 독립변수 `X`는 설명에 사용하는 변수이고, 종속변수 `y`는 설명하고자 하는 변수입니다.
+- **절편**은 독립변수가 0일 때 모델이 예측하는 종속변수의 값입니다.
+- **회귀계수**는 독립변수가 1단위 달라질 때 종속변수가 평균적으로 얼마나 달라지는 관계로 추정되는지를 나타냅니다.
+- 회귀계수는 변수 사이의 관계를 나타내며, 그 자체로 인과관계를 의미하지는 않습니다.
+
+
+----------------------------------
+
+단순선형회귀란?
+
+단순선형회귀 모델은 이러한 관계를 하나의 직선으로 표현하며, 직선의 위치와 기울기는 절편과 회귀계수로 결정됩니다.
+
+절편
+→ X가 0일 때 모델이 예측하는 y의 값
+
+회귀계수
+→ X가 1단위 달라질 때 y가 평균적으로 얼마나 달라지는 관계인지 나타내는 값
+
+회귀계수의 부호를 통해 관계의 방향도 확인할 수 있습니다.
+회귀계수 > 0
+→ X가 높을수록 y도 높아지는 선형 관계
+
+회귀계수 < 0
+→ X가 높을수록 y는 낮아지는 선형 관계
+
+
+단, 회귀계수를 해석할 때는 **변수의 단위와 분석 상황을 함께 확인해야 하며**, 회귀계수가 양수 또는 음수라는 사실만으로 인과관계를 판단해서는 안 됩니다.
+
+또한 모델을 구축하고 회귀계수를 확인하는 것만으로 모델이 데이터를 잘 설명한다고 판단할 수는 없습니다.
+
+다음 섹션에서는 **결정계수(R²)** 를 이용하여 만들어진 회귀모델이 데이터의 변동을 어느 정도 설명하고 있는지 확인합니다.
+
+----------------------------------
+
+
+### 2. 결정계수(R²)를 이용한 모델의 설명력 평가
+
+
+
+결정계수(R 
+2
+ ) 핵심 요약 정리입니다.
+
+$$R^2 = 1 - \frac{\text{SSE}}{\text{SST}}$$
+ 
+SST (전체 변동): 데이터 원본이 가진 총 변동량 (실제값 - 평균값)
+
+SSE (오차 변동): 모델이 설명하지 못한 오차 (실제값 - 예측값)
+
+
+
+ MAE/MSE가 등장한 흐름과 이유
+ '오차(Residual)'의 개념 정의
+
+ 모델 평가를 할 때는 항상 "실제 정답 - 예측값"이라는 오차(잔차)를 바탕으로 계산합니다.
+
+ MAE와 MSE는 이 오차를 다루는 가장 대표적인 지표이기 때문에 오차 개념을 설명하기 위한 예시로 먼저 제시되었습니다.
+
+
+ SSE(Sum of Squared Errors)로의 자연스러운 연결
+MSE는 오차를 제곱($2$)하여 평균을 낸 값입니다.
+SSE는 오차를 제곱($2$)하여 모두 더한(Sum) 값입니다.
+
+즉, MSE에서 평균을 내기 전 단계(합계)가 바로 SSE이기 때문에, 오차를 제곱해서 더한다는 개념의 이해를 돕기 위해 MSE가 함께 언급된 것입니다.
+
+
+최종 정리 한눈
+
+쉬운 비유 (시험 점수 변동)
+SST (전체 변동): 내가 풀어야 할 문제 전체 (100점 분량)
+SSE (예측 못한 변동): 공부를 안 해서 틀린 문제 (20점 분량)
+$R^2$ (결정계수): 공부해서 맞힌 비율 (80%) $\rightarrow 1 - \frac{20}{100} = 0.8$
+
+
+즉, 예측에 실패한 오차(SSE)를 먼저 구한 뒤, 전체(1)에서 그 비율을 빼서 "모델이 데이터를 얼마나 잘 설명/예측하고 있는지(성공률)"를 최종적으로 측정하는 것입니다.
+
+T - 통계랑 : 관찰된 평균 차이가 표준 오차의 몇 배인지를 나타내는 검증요 숫자
+-> 평균이 75점 , 기준이 70점 , 표준 오차가 0.57 이면 t 값은 약 8.6이고
+평균 차이가 표준오차의 약 8.6배정도라는 뜻
+
+독립 표본 t 검정: 서로 독립된 두집단의 모평균이 같은지 비교하는 검정
+-> 광고 a와 b를 본 서로 다른 고객의 평균 구매금액을 비교한다.
+
+Welch t검정 : 두 집단의 분산이 같다는 가정x, 독립된 두 집단의 평균을 비교
+
+Shaprio : 데이터가 정규분포에서 왔다는 귀무가설을 검토하는 정규성 검정
+-> p값이 0.05보다 작으면 정규성 가정과 맞지 않는 근거가 있다고 해석한다
+
+Levene: 여러 집단의 분산이 같다는 귀무가설을 검토하는 검정
+
+-> 두 집단 비교에서 p 값이 0.05보다 작으면 등 분산 가정과 맞지 않는 근거가 있다고 해석한다.
+
+
+ANOVA(일원 분산 분석) : 하나의 집단 구분 기준에 따라 나뉜 여러 집단의 모평균이 모두 같은지 검정하는 방법
+-> 교육 방법 a, b , c 로 교육을 진행한 뒤 점수를 비교한다.
+
+
+F 통계량 : F 통계량은 집단 간 평균 제곱을 집단 내 평균제곱으로 나눈 값이다.
+-> 귀무 가설과 가정이 맞을 때, 두 평균 제곱은 같은 분산을 추정한다.
+F값이 클수록 집단간 차이가 내부 퍼짐에 비해 크다.
+
