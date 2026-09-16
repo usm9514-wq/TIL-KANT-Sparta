@@ -122,6 +122,9 @@ print(f"등분산성 p-value: {p_levene:.3f}")
 
 통계적 유의성: 검정 결과가 미리 정한 기각 기준을 충족하여, 차이를 뒷받침할 통계적 근거가 있다는 뜻
 
+
+정규 분포 
+
 Volatility (Variability): How much the values differ from one another.Standard Deviation 
 ($\sigma$ or $s$): How widely the values are spread out around the mean (average).
  Takeaway: A larger standard deviation means there is a wider gap between overall data points.
