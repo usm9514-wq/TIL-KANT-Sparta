@@ -1,0 +1,71 @@
+numbers = [10, 20, 30, 40, 50]
+
+left = 0
+right = len(numbers) - 1
+
+mid = (left + right) // 2
+
+print(mid)
+print(numbers[mid])
+
+왼쪽은 0 부터 시작하는거고 오른쪽은 끝 인덱스 부터 시작하려는거
+
+
+
+
+while left <= right:
+    mid = (left +right) //2
+
+    if numbers[mid] == target:
+
+
+class ProductFinder:
+    def __init__(self, products):
+        self.products = products
+
+
+    def find_product(self,target):
+        left = [0]
+        right = len(products)-1
+
+
+
+
+
+데이터 처리후 결과 확인하기
+
+
+상황	처리	처리 후 확인
+결측치 처리	df["Age"] = df["Age"].fillna(0)	df["Age"].isna().sum()
+중복 제거	df = df.drop_duplicates()	df.duplicated().sum()
+자료형 변환	df["Age"] = df["Age"].astype(int)	df["Age"].dtype
+범주값 정리
+(대소문자 섞인 상황)	df["Grade"] = df["Grade"].str.lower()	df["Grade"].value_counts()
+이상치 처리	df["Price"] = df["Price"].clip(0, 100)	df["Price"].describe()
+조건 추출	result = df[df["Age"] >= 20]	result["Age"].min()
+파생변수 생성	df["Total"] = df["Price"] * df["Count"]	df[["Price", "Count", "Total"]].head()
+
+
+-----------------------------------------------------------------
+
+
+
+
+
+프로덕트 분석: 사용자 행동 데이터를 분석해 서비스의 문제를 찾고 개선을 위한 의사결정을 돕는 과정
+-> 쇼핑몰 방문자는 늘었는데 구매자가 비슷하다. 상품 조회(클릭 수), 장바구니, 결제순서등의 사용자 행동을 살펴보면 어느 과정에서 딜레이가 
+있었는 지어느 부분을 개선해야할지 정할 수 있다.
+
+KPI : 비즈니스의 핵심목표가 얼마나 달성되고 있는 지 판단하기 위해 중요하게 관리하는 지표
+월간 유로 강의 구매자 수가  KPT가 될수  있다.
+
+보조 지표 : KPI의 변화와 그 배경을 구체적으로 이해하기 위해 함께 확인 하는 지표
+
+허무 지표: 숫자나 내용 자체는 좋아보이지만 현재 목표나 KPI와는 무관하거나 연결이 약한 지표
+
+프레임 지표:  
+매출이 줄었다면 유입의 감소인지, 첫 이용자수의 감소인지, 재이용, 재방문이 줄었는지 등 
+여러 요인을 확인 할 수 있는데 이렇게 분석할 질문들을 정리하는 틀을 프레임 워크라고 한다.
+
+AARRR: 사용자 행동을 기록, 첫 가치 경험, 유지 매출발생, 추천 다섯 관점으로 나누어 분석하는 방법
+-> Kant DS 를 광고를 통해 방문하고, 첫 강의를 드고, 재수강 하고, 유로 강의를 구매하고, 친구에게 추천하는 행동을 나누어 생각할 수 있다.
