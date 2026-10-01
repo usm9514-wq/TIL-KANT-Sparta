@@ -1,0 +1,204 @@
+큰 원칙
+학습 데이터./ 테스트 데이터는 서로 겹치면 안된다
+겹치면 데이터 누수(data leakage)라 부른다
+ㅏ학습 데이터에 테스트 데이터가 들어가는 순간,
+성능 측정한게 사용하기 어렵게 됩니다.
+
+
+학습데이터  / 테스트 데이터는 공평하게 나눠져야 한다
+보통 랜덤하게 나눠준다
+우리가 갖고 있는 전체 데이터 특성을 유지하면서 학습 테스트 데이터로 나눠주기 위함
+
+이 큰 우너칙을 시계열. 이미지 데이터, 자연어 데이터에 적용해도 된다.
+-> 적용할 때 데이터 자체의 특성이 
+
+일반데이터:
+각각의 데이터는 서로 독립이다
+일반 데이터 가지고 학습/테스트 데이터 만들어 줄때는 랜덤하게 뽑으면 공정하게 뽑는거다
+
+학습 데이터 / 검증 데이터/ 테스트 데이터 나눌 때, 6:2:2
+
+학습 데이터에 잘 예측하려고 하는게 목표다? x
+unseen data( 학습데이터에 포함되어 있지 않은 데이터) 잘 예측하는게 목표
+
+데이터 누수
+
+
+시계열 데이터
+시간적 흐름이 중요한 정보다
+
+랜덤하게 뽑으면 시간적 흐름이 무너진다
+얘는 랜덤하게 뽑는게 아니라, 시간 순서 로 정렬해주고 순차적으로 뽑는다
+
+학습 데이터 테스트 데이터가 서로 겹친다
+시간적 누수
+
+
+
+
+선형 회귀
+데이터가 x 가 왼쪽 눈 시력
+ex) [0:5]
+정답 y : 오른쪽 눈 시력
+
+왼쪽 눈 시력 x  () + b = y' (오른쪽 눈 시력)
+
+어떤 숫자랑, b는 학습하면 알아서 차아줌
+
+
+
+
+오른쪽 눈 시력 y를 예측한다,
+
+왼쪽 눈 시력 x () + b = 예측 결과
+
+AR 모델
+과거 시점 별로 곱해지는 숫자 존재
+
+3달전 x() + 2달전 x [] + 1달전 x {}
+
+
+
+ar 모델 
+과거 시점 별로 곱해지는 숫자 존재
+ex) 이번달 예측하는데 1달 전거만 사용해서 예측하고 싶어 = ar(1)
+이전달 의 매출 x 어떤 숫자 1 + 상수항 = 예측값
+
+ex) 이번달 예측하는데 3달 전거까지 사용해서 예측하고 싶어= ar(3)
+3달전 매출 x 어떤 숫자 +2달전 매출 x  
+
+
+
+
+
+
+
+
+
+
+
+### AR = AutoRegressive
+
+AR predicts the future using **past actual values**.
+
+Think:
+
+> “What happened recently probably affects what happens next.”
+
+Example:
+
+| Month | Sales |
+|---|---:|
+| Jan | 100 |
+| Feb | 110 |
+| Mar | 120 |
+
+An **AR(1)** model mainly looks at the previous value:
+
+
+Y_t = c + \phi Y_{t-1}
+
+So conceptually:
+
+> April prediction = constant + coefficient × March sales
+
+If the fitted coefficient were `0.9`:
+
+> April ≈ `10 + 0.9 × 120 = 118`
+
+The ML/statistical tool automatically finds the best coefficient.
+
+**AR(2)** just means it considers the previous **2 periods**:
+
+> April prediction ← March + February
+
+So:
+
+**AR = past actual values → predict future value**
+
+---
+
+### MA = Moving Average
+
+This one is slightly confusing because in ARIMA, **MA does NOT mean simply averaging the last few values**.
+
+MA predicts using **past prediction errors**.
+
+Suppose:
+
+| Month | Actual | Prediction | Error |
+|---|---:|---:|---:|
+| Jan | 100 | 95 | +5 |
+| Feb | 110 | 120 | −10 |
+| Mar | 120 | 115 | +5 |
+
+The model notices:
+
+> “Recently I was too low / too high. Maybe that error pattern helps me correct my next prediction.”
+
+A simple **MA(1)** idea is:
+
+\[
+Y_t = \mu + \theta e_{t-1}
+\]
+
+where `e` is the previous prediction error.
+
+So:
+
+**MA = past prediction errors → adjust future prediction**
+
+---
+
+### The easiest way to remember
+
+| Model | Looks at |
+|---|---|
+| **AR** | Past **actual values** |
+| **MA** | Past **prediction errors** |
+| **ARMA** | Both |
+| **ARIMA** | Both + handles trend/non-stationary data |
+
+For ML usage, you usually don't manually calculate all the coefficients. You mainly choose something like:
+
+```python
+ARIMA(order=(2, 0, 1))
+```
+
+That means approximately:
+
+> **AR(2)** → use 2 previous observations  
+> **I(0)** → no differencing  
+> **MA(1)** → use 1 previous error
+
+Then the library estimates the actual coefficients for you.
+
+So the key thing to understand is:
+
+> **AR asks “What happened before?”**  
+> **MA asks “How wrong was I before?”**
+
+That level of understanding is usually enough before you start actually using ARIMA/SARIMA models.
+
+
+--------------------------------------------------------------------------
+
+데이터 누수: 예측 시점에는 사용 할 수 없는 정보
+-> 시험점수 데이터에 합격 여부 칼럼이 잇다면 <- 합격여부는 데이터 누수일 가능성이 있다
+
+
+ARIMA 
+자기회구 차수 p : 과거 시차 의 범위를 정하는 값
+
+월별 ARIMA(2,0,0) 이면 7 월을 설명할 때 6월과 5월 매출을 사용하겠다는 의미
+
+차분 차수 d: ARIMA 에서 차분을 몇 번 적용 할 지 나타내는 값
+-> D =0 (차분 x). d = 1(1차 차분), d = 2(2차 차분)
+
+이동 평균 차수 q :  과거 충격의 시차 범위를 정하는 값
+
+월별 q =2 라면 7월을 설명할 때 6월 과 5월의 추정 오차를 반영 한다.
+
+ARIMA : 차분 및 자귀 회구 및 이동 평균 요소를 결합한 시계열 모델
+-> ARIMA (2,1,1)은 매출을 한번 차분 한뒤 최근 두 변화량과 직전 오차를 활용 하여 모델링 하겠다는 뜻
+

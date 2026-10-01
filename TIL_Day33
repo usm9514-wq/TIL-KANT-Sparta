@@ -1,0 +1,229 @@
+지도학습(Supervised Learning)은 X와 정답인 y를 함께 사용하여 두 데이터 사이의 관계를 학습하는 방법입니다.
+
+
+비지도학습(Unsupervised Learning)은 정답인 y 없이 데이터에 존재하는 구조나 패턴을 찾는 방법입니다.
+
+
+## RMSE — 큰 오차를 반영하면서 원래 단위로 확인하기
+
+
+따라서 평균적인 오차 크기를 직관적으로 확인하려면 MAE, 큰 오차까지 중요하게 반영하려면 RMSE를 활용할 수 있습니다.
+
+
+
+##  R² — 평균값으로 예측한 결과와 비교하기
+
+
+
+
+## 이를 Confusion Matrix(혼동행렬)라고 합니다.
+
+`True / False`는 예측이 맞았는지를 나타내며, `Positive / Negative`는 모델이 Positive 또는 Negative 중 어느 클래스로 예측했는지를 나타냅니다.
+
+이 네 가지 결과를 이용하여 다양한 분류 평가지표를 계산할 수 있습니다.
+
+
+ROC Curve는 Threshold를 여러 값으로 변경하면서 다음 두 값을 비교한 곡선입니다.
+
+
+TPR (True Positive Rate)
+= Recall
+= TP / (TP + FN)
+
+FPR (False Positive Rate)
+= FP / (FP + TN)
+
+## 연습 문제 8
+
+
+recall : 실제 참인것 중 얼마나 찾았는가
+참: 암
+-> 실제 암환자중 얼마나 찾았는가
+
+Precision: 참이라고 예측한 것 중 참은 얼마나 있는가
+참: vip 고객
+vip 고객이라 예측한 것 중 실제 vip 고객은 얼마나 있는가
+
+f1-score: recall 과 precision 둘다 본다.
+
+
+A. 광고 대상이라고 예측한 고객에게
+   높은 비용의 프로모션을 제공한다.
+   불필요한 프로모션 제공을 줄이는 것이 중요하다.
+
+B. 제조 공정에서 불량 제품을 탐지한다.
+   실제 불량 제품을 놓치지 않는 것이 중요하다.
+
+C. Positive와 Negative를 모두 고려하면서
+   Precision과 Recall의 균형을 확인하고 싶다.
+
+
+어떤 원리로 데이터를 학습하고 예측하는지 그리고 문제와 데이터의 특성에 따라 어떤 모델을 고려할 수 있는지
+
+
+
+
+Supervised Learning
+│
+├─ Regression: Predicts continuous numerical values
+│   │
+│   ├─ Linear Regression: Models linear relationships between variables
+│   ├─ Decision Tree: Predicts values using rule-based splits
+│   ├─ Random Forest: Combines multiple decision trees for more robust predictions
+│   └─ KNN: Predicts values based on nearby data points
+│
+└─ Classification: Predicts categorical classes or labels
+    │
+    ├─ Logistic Regression: Predicts the probability of a class
+    ├─ Decision Tree: Classifies data using rule-based splits
+    ├─ Random Forest: Combines multiple decision trees for more robust classification
+    └─ KNN: Classifies data based on nearby data points
+
+
+Unsupervised Learning
+│
+├─ Clustering: Groups similar data points together
+│   │
+│   └─ K-Means: Groups data into K clusters based on similarity
+│
+└─ Dimensionality Reduction: Reduces the number of features while preserving important information
+    │
+    └─ PCA: Transforms features into fewer principal components while preserving as much variance as possible
+
+
+이 모델은 어떤 원리로 동작하는가?
+              ↓
+어떤 데이터의 특성을 이용하는가?
+              ↓
+어떤 장점과 한계가 있는가?
+              ↓
+어떤 상황에서 고려할 수 있는가?
+
+
+
+
+
+
+[테스트 ]
+
+
+
+        Root Node
+            │
+      Feature 조건
+       ┌────┴────┐
+      Yes        No
+       │          │
+ Internal      Internal
+   Node          Node
+   │              │
+   ↓              ↓
+ Leaf           Leaf
+ Node           Node
+
+
+
+
+
+
+ 지도 학습: x와 정답 y를 함께 사용해 둘 사이의 관계를 학습 하는 방법
+ -> 이커머스에서 고객 이탈여부(0,1, 분류) / 이커머스에서 가을철 옷 매출 예측(회귀)
+
+-> 로지스틱 회귀, 랜덤 포레스트, Regression
+
+
+비지도 학습: 미리 정해진 정답 y  없이 데이터의 구조나 패턴을 찾는 방법
+Train/vaildation/test
+Train: 모델이 예측 관계나 패턴을 학습하는 데 사용하는 데이터
+validation: 개발 중 모델과 설정을 비교하고 선택하는 데 사용하는 데이터
+test: 모든 선택을 마친 모델의 성능을 최종적으로 평가하기 위해 남겨둔 데이터
+
+파라미터, 하이퍼 파라미터
+파라미터 : 학습으로 정해지는 모델의 내부 값
+하이퍼 파라미터: 학습 방식을 제어하는 설정 값
+하이퍼 파라미터 튜닝: 검증 성능 등을 기준으로 적절한 하이퍼 파라미터를 찾는 과정
+모델 고도화 : 데이터 전처리/ 하이퍼 파라미터/ 외부 데이터 Join
+
+예측 오차 : 실제 값과 예측 값 사이의 차이
+-> 실제 구매액이 10만원인데 12만원으로 예측한다면 오차는 -2만원이다
+
+실제 구매액 10만원
+1번 예측 12만원 = -12만원 오차
+2번 예측 8만원 = 2만원 오차
+
+평균 절대 오차(MAE): 각 예측 오차의 절댓값을 평균한 값
+-> 실제 구매액이 10,20, 30,40 만원이고 예측값이 12, 18 , 33, 39 만원의 차이면
+2,2,3,1 만큼 차이가 나기 때문에 MAE는 2이다. 
+
+평균 제곱 오차 : 각 예측 오차를 제곱한 뒤 평균한 값
+
+
+2 ->4 -> 8 -> 16 -> 32
+2 ->4 -> 8 -> 16 -> 199
+3번째 오차는 1, 6번째의 오차는 167
+
+
+평균 제곱 오차(MSE) : 각 예측 오차를 제곱한 뒤 평균한 값
+구매액의 예측 오차 크기가 2,2,3,1 만원이면 제곱하면 4,4,9,1 로 
+MSE는 4.5이다.
+
+평균 제곱근 오차(RMSE) : MSE에 제곱근을 적용한 값
+내 고객의 구매액을 A모델 은 각 2만원 씩 틀리고, B 모델은 세 명을 맞히고 8만원 정도 틀렸다면
+MAE는 둘다 2만원 이지만 RMSE는 A가 2만원 B가 4만원이다.
+B가 조금 더 큰 실수가 있었다는 것을 알 수 있다.
+
+결정 계수 R^2: 평가 데이터의 실제값 평균으로 예측하는 기준과 모델의 제곱 오차를 비교한 지표(설명력)
+실제 구매액 10,20, 30, 40 만원을 모두 평균인 25만원으로 예측하면 제곱 오차 합은 500
+모델이 12, 18,33,39 만원으로 예측하면 합은 18이기 때문에 R^2은 1-18 / 500 =0.964
+오차 합이 96.4%
+
+혼동 행렬: 실제 클래스와 예측 클래스를 교차해 맞힌 경우와 틀린 경우를 세는 표
+이진 분류에서 TP,TN, FP, FN 의 네칸으로 결과를 구분한다.
+
+TP: 실제 1(p) 을 1(p) 로 맞힌 경우
+FP: 실제 0(N)을 0(n)으로 맞힌 경우
+-> 구매 예측에서 실제  구매한 고객을 구매한 고객으로 예측한 16명 정도를 TP로
+실제 구매하지 않은 고객 70명을 TN으로, 둘의 합인 85명은 올바르게 예측한 고객이다.
+
+FP: 실제 0(N)인데 1(P)로 잘못 예측한 경우
+
+불량을 양성으로 정햇을때 정상 제품 10ㄱ래를 불량이라고 판정하면 Fp는 10개
+정상 제품을 재검사 대상으로 잘못 판단
+
+FN: 실제 1(P) 인데 0(N) 으로 잘못 예측한 경우
+불량 제품 20개중 10개를 정상이라고 판정한 경우
+재검사 대상으로 판단 해야하는데 잘못 판단
+
+Accuracy(정확도) :
+TP와 TN을 합쳐 전체수로 나눈다.
+구매 예측 100건에서 구매를 맞힌 15건과 미구매를 맞힌 70건을 합치면 약 85%의 정확도가 나온다.
+100개의 기업중 94개 정도가 폐업을 햇다 . -> 100개 전체가 다 폐업했다고 예측을 해도 94% 의 정확도가 나온다
+단독으로는 사용을 권장하지 않고 다른 성능 평가 지표들과 함께 사용한다.
+
+
+클래스 불균형 : 정답 범주별 데이터 수가 크게 다른 상태
+
+-> 고객 100명중 구매자 5명, 미구매자 95명 일때 -> 클래스 불균형 상태다.
+
+
+Precision(정밀도) : 양성(1,p)라고 예측한 것중에 실제 (1, P) 인 비율
+    분모는 실제 양성 전체가 X, 분모는 양성으로 예측한 전체
+    구매할것이라고 예측한 고객 25명중 실제 구매자가 15명이면 15/25 -> 60% 의 precision( 정밀도)를 보인다.
+
+
+Recall(재현율) : 실제 (1, P) 인 것 중 모델이 양성 (1,P)으로 찾아낸 비율
+
+분모가 실제 양성 전체
+실제 구매자 20명중 15명을 구매자로 찾아 냈다면 재현율은 75%이다.
+재현율은 실제 양성을 얼마나 놓치지 않았는 지를 확인하기 위함
+
+
+F-1 Score: 정밀도와 재현율의 조화 평균
+
+위에서 정밀도가 60% 이고 재현율이 75%라면 f1-score 는 67% 정도 이다.
+
+ROC 곡선 : 임계값 변화에 따른 양성 탐지율과 음성 오판율을 보기 위함
+
+ROC-VUC :곡선 아래 면적으로 양성과 음성을 점수로 구분하는 능력을 요구
+실제 구매자 두명의 점수가 0.9, 0.6 이고 미 구매자의 두명의 점수가 0.7과 0.2라면 구매자, 미구매자 쌍 4쌍을 만들 수 있는데
+세쌍에서 구매자의 점수가 높아서 0.75에 AUC를 가진다.
